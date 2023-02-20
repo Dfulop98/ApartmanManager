@@ -18,7 +18,9 @@ namespace DataAccessLayer.DbAccess
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Reservation> Reservations { get; set; }
-
+        public DbSet<Guest> Guests { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 
 }
