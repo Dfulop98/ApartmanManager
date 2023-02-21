@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.Services
+namespace ApartmanTests.ServiceTests
 {
-    internal class UserService
+    public class RoomServiceTests
     {
     }
 }

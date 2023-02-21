@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ServiceLayer.Models;
+using DataAccessLayer.Models;
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IBookingService
