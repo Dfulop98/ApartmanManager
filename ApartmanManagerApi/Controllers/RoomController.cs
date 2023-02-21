@@ -22,6 +22,12 @@ namespace ApartmanManagerApi.Controllers
             return Ok(await _roomService.GetAllRoomAsync());
         }
 
+        [HttpGet("/api/room/{id}")]
+        public async Task<ActionResult<Room>> GetRoomById(int id)
+        {
+            return Ok(await _roomService.GetRoomByIdAsync(id));
+        }
+
 
     }
 }

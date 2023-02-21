@@ -87,7 +87,12 @@ namespace ApartmanTests.ControllerTests
         public async Task GetRoomById_ReturnType_OkObjectResult()
         {
             //Arrage
-            _roomServiceMock.Setup(x => x.GetRoomById(1)).ReturnsAsync(_expectedRooms.Where(x => x.Id == 1));
+            _roomServiceMock.Setup(x => x.GetRoomByIdAsync(1)).ReturnsAsync(_expectedRooms.Where(x => x.Id == 1).First());
+            //Act
+            var result = await _controller.GetRoomById(1);
+            //Assert
+            Assert.IsType<OkObjectResult>(result.Result);
+            
         }
     }
 }

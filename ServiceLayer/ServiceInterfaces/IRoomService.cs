@@ -10,5 +10,6 @@ namespace ServiceLayer.ServiceInterfaces
     public interface IRoomService
     {
         public Task<IEnumerable<Room>> GetAllRoomAsync();
+        public Task<Room> GetRoomByIdAsync(int id);
     }
 }
