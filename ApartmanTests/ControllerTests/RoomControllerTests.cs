@@ -1,42 +1,93 @@
-﻿using ApartmanTests.ServiceTests;
+﻿using ApartmanManagerApi.Controllers;
 using DataAccessLayer.DbAccess;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Moq;
+using ServiceLayer.ServiceInterfaces;
+using ServiceLayer.Services;
 using Xunit;
 
 namespace ApartmanTests.ControllerTests
 {
     public class RoomControllerTests
     {
+        private readonly Mock<IRoomService> _roomServiceMock;
+        private readonly RoomController _controller;
+
+        private readonly List<Room> _expectedRooms = new()
+        { 
+            new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = true },
+            new Room { Id = 2, RoomNumber = "102", Description="test1", IsAvailable = false },
+            new Room { Id = 3, RoomNumber = "103", Description="test1", IsAvailable = true }};
+
+        public RoomControllerTests()
+        {
+            _roomServiceMock = new Mock<IRoomService>();
+            _controller = new RoomController(_roomServiceMock.Object);
+        }
+
+
+        //GetAllRooms
+
         [Fact]
-        public void GetAllRooms_ReturnOK()
+        public async Task GetAllRooms_ReturnType_OkObjectResult()
+        {
+            // Arrange
+            _roomServiceMock.Setup(x => x.GetAllRoomAsync()).ReturnsAsync(_expectedRooms);
+            // Act
+            var result = await _controller.GetAllRooms();
+            // Assert
+            Assert.IsType<OkObjectResult>(result.Result);
+
+        }
+        [Fact]
+        public async Task GetAllRooms_ReturnAssignableFrom_IEnumerableRoom()
+        {
+            // Arrange
+            _roomServiceMock.Setup(x => x.GetAllRoomAsync()).ReturnsAsync(_expectedRooms);
+            // Act
+            var result = await _controller.GetAllRooms();
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsAssignableFrom<IEnumerable<Room>>(okResult.Value);
+        }
+
+        [Fact]
+        public async Task GetAllRooms_Returns_ReturnAllRooms()
+        {
+            // Arrange
+            _roomServiceMock.Setup(x => x.GetAllRoomAsync()).ReturnsAsync(_expectedRooms);
+            // Act
+            var result = await _controller.GetAllRooms();
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var rooms = Assert.IsAssignableFrom<IEnumerable<Room>>(okResult.Value);
+            Assert.Equal(3, rooms.Count());
+
+        }
+        
+        [Fact]
+        public async Task GetAllRooms_Returns_ReturnCorrectDatas()
+        {
+            // Arrange
+            _roomServiceMock.Setup(x => x.GetAllRoomAsync()).ReturnsAsync(_expectedRooms);
+            // Act
+            var result = await _controller.GetAllRooms();
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var rooms = Assert.IsAssignableFrom<IEnumerable<Room>>(okResult.Value);
+            Assert.Equal(_expectedRooms, rooms);
+        }
+
+
+        //GetRoomById
+
+        [Fact]
+        public async Task GetRoomById_ReturnType_OkObjectResult()
         {
             //Arrage
-            var dbContextOptions = new DbContextOptionsBuilder<AMDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetAllRooms_ReturnsOk")
-                .Options;
-            using (var dbContext = new AMDbContext(dbContextOptions))
-            {
-                dbContext.Rooms.AddRange(new List<Room>
-                {
-                    new Room { Id = 1, RoomNumber = "1", IsAvailable= true },
-                    new Room { Id = 2, RoomNumber = "2", IsAvailable= false }
-                });
-                dbContext.SaveChanges();
-            }
-            var controller = new RoomController(new RoomService(dbContextOptions));
-            //act
-            var result = controller.GetAllRooms();
-            //assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var rooms = Assert.IsAssignableFrom<IEnumerable<Room>>(okResult.Value);
-            Assert.Equal(2, rooms.Count());
+            _roomServiceMock.Setup(x => x.GetRoomById(1)).ReturnsAsync(_expectedRooms.Where(x => x.Id == 1));
         }
     }
 }
