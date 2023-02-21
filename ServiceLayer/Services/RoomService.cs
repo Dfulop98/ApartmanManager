@@ -1,12 +1,23 @@
-﻿using System;
+﻿using DataAccessLayer.DbAccess;
+using DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
+using ServiceLayer.ServiceInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Services
+namespace ServiceLayer.Services
 {
-    internal class RoomService
+    public class RoomService : IRoomService
     {
+        private readonly AMDbContext _db;
+        public RoomService(AMDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<IEnumerable<Room>> GetAllRoomAsync() => await _db.Rooms.ToListAsync();
     }
 }
