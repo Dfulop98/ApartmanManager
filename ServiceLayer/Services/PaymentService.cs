@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Services
+namespace ServiceLayer.Services
 {
     internal class PaymentService
     {
