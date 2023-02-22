@@ -19,6 +19,7 @@ namespace ServiceLayer.Services
         }
 
         public async Task<IEnumerable<Room>> GetAllRoomAsync() => await _db.Rooms.ToListAsync();
+
         public async Task<Room> GetRoomByIdAsync(int id) => await _db.Rooms.Where(x => x.Id == id).FirstAsync();
     }
 }

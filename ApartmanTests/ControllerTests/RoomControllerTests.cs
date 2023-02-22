@@ -94,5 +94,30 @@ namespace ApartmanTests.ControllerTests
             Assert.IsType<OkObjectResult>(result.Result);
             
         }
+        
+        [Fact]
+        public async Task GetRoomById_ReturnAssignableFrom_Room()
+        {
+            //Arrage
+            _roomServiceMock.Setup(x => x.GetRoomByIdAsync(1)).ReturnsAsync(_expectedRooms.Where(x => x.Id == 1).First());
+            //Act
+            var result = await _controller.GetRoomById(1);
+            //Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsAssignableFrom<Room>(okResult.Value);
+        }
+        
+        [Fact]
+        public async Task GetRoomById_Returns_ReturnCorrectRoom()
+        {
+            //Arrage
+            _roomServiceMock.Setup(x => x.GetRoomByIdAsync(1)).ReturnsAsync(_expectedRooms.Where(x => x.Id == 1).First());
+            //Act
+            var result = await _controller.GetRoomById(1);
+            //Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var room = Assert.IsAssignableFrom<Room>(okResult.Value);
+            Assert.Equal(_expectedRooms.Where(x => x.Id == 1).First(), room);
+        }
     }
 }
