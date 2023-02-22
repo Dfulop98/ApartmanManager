@@ -262,6 +262,13 @@ namespace Tests
             }
         }
 
+
+
+
+
+
+
+
         [Test]
         public Task GetRoomByIdAsync_EmptyRoomList_ThrowsException()
         {
@@ -410,6 +417,11 @@ namespace Tests
             }
         }
         
+
+
+
+
+
         [Test]
         public Task GetRoomByRoomNumberAsync_RoomListIsEmpty_ThrowsException()
         {
@@ -447,6 +459,107 @@ namespace Tests
                 Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetRoomByRoomNumberAsync("104"));
             }
             return Task.CompletedTask;
+        }
+        
+        [Test]
+        public async Task GetRoomByRoomNumberAsync_RoomIdIsCorrect_ReturnCorrectRoomId()
+        {
+            //Arrage
+            using (_db)
+            {
+                //Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+
+                var service = new RoomService(_db);
+                var expected = new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                var result = await service.GetRoomByRoomNumberAsync("101");
+                // Assert
+                Assert.That(result.Id, Is.EqualTo(expected.Id));
+            }
+            
+        }
+        
+        [Test]
+        public async Task GetRoomByRoomNumberAsync_RoomNumberIsCorrect_ReturnsCorrectRoomNumber()
+        {
+            //Arrage
+            using (_db)
+            {
+                //Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+
+                var service = new RoomService(_db);
+                var expected = new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                var result = await service.GetRoomByRoomNumberAsync("101");
+                // Assert
+                Assert.That(result.RoomNumber, Is.EqualTo(expected.RoomNumber));
+            }
+            
+        }
+        
+        [Test]
+        public async Task GetRoomByRoomNumberAsync_DescriptionIsCorrect_ReturnCorrectDescription()
+        {
+            //Arrage
+            using (_db)
+            {
+                //Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+
+                var service = new RoomService(_db);
+                var expected = new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                var result = await service.GetRoomByRoomNumberAsync("101");
+                // Assert
+                Assert.That(result.Description, Is.EqualTo(expected.Description));
+            }
+            
+        }
+        
+        [Test]
+        public async Task GetRoomByRoomNumberAsync_StatusIsCorrect_ReturnCorrectStatus()
+        {
+            //Arrage
+            using (_db)
+            {
+                //Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+
+                var service = new RoomService(_db);
+                var expected = new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                var result = await service.GetRoomByRoomNumberAsync("101");
+                // Assert
+                Assert.That(result.IsAvailable, Is.EqualTo(expected.IsAvailable));
+
+            }
+            
         }
 
 
