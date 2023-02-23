@@ -60,7 +60,21 @@ namespace ServiceLayer.Services
             
         }
 
-
+        public async Task<HttpResponseMessage> RemoveRoomByIdAsync(int id)
+        {
+            bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == id);
+            if (!roomExists)
+            {
+                return CreateHttpResponseMessage(HttpStatusCode.NotFound, "Room doesnt exists.");
+            }
+            else
+            {
+                Room existingRoom = await _db.Rooms.Where(r => r.Id == id).FirstAsync();
+                _db.Rooms.Remove(existingRoom);
+                await _db.SaveChangesAsync();
+                return CreateHttpResponseMessage(HttpStatusCode.OK, "Room succesfully deleted.");
+            }
+        }
 
         private static HttpResponseMessage CreateHttpResponseMessage(HttpStatusCode statusCode, string message)
         {

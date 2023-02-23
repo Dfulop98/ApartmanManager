@@ -667,7 +667,7 @@ namespace Tests
 
 
         [Test]
-        public async Task UpdateRoomById_RoomDoesntExists_ReturnNotFound()
+        public async Task UpdateRoomAsync_RoomDoesntExists_ReturnNotFound()
         {
             using (_db)
             {
@@ -684,7 +684,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task UpdateRoomById_RoomDoesntExists_ReturnNotFoundMessage()
+        public async Task UpdateRoomAsync_RoomDoesntExists_ReturnNotFoundMessage()
         {
             using (_db)
             {
@@ -701,7 +701,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task UpdateRoomById_RoomSuccesfullyUpdate_ReturnOk()
+        public async Task UpdateRoomAsync_RoomSuccesfullyUpdate_ReturnOk()
         {
             using (_db)
             {
@@ -727,7 +727,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task UpdateRoomById_RoomSuccesfullyUpdate_ReturnOkMessage()
+        public async Task UpdateRoomAsync_RoomSuccesfullyUpdate_ReturnOkMessage()
         {
             using (_db)
             {
@@ -748,15 +748,143 @@ namespace Tests
                 var result = await service.UpdateRoomAsync(newRoom);
                 //Assert
                 Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully updated."));
+ 
+            }
+        }
+
+        [Test]
+        public async Task UpdateRoomAsync_RoomSuccesfullyUpdate_ReturnCorrectRoom()
+        {
+            using (_db)
+            {
+
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+
+                RoomService service = new(_db);
+                Room newRoom = new() { Id = 1, RoomNumber = "101", Description = "testnew1", IsAvailable = true };
+
+                // Act
+                await service.UpdateRoomAsync(newRoom);
+                var updatedRoom = await service.GetRoomByIdAsync(1);
+                //Assert
+                Assert.That(newRoom.RoomNumber, Is.EqualTo(updatedRoom.RoomNumber));
 
             }
         }
 
-
-
-
-
-
-
+        [Test]
+        public async Task RemoveRoomByIdAsync_RoomDoesntExist_ReturnNotFound()
+        {
+            using(_db)
+            {
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                RoomService service = new(_db);
+                Room roomToRemove = new() { Id = 4, RoomNumber = "104", Description = "test4", IsAvailable = false };
+                // Act
+                HttpResponseMessage result = await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            }
+        }
+        [Test]
+        public async Task RemoveRoomByIdAsync_RoomDoesntExist_ReturnNotFoundMessage()
+        {
+            using(_db)
+            {
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                RoomService service = new(_db);
+                Room roomToRemove = new() { Id = 4, RoomNumber = "104", Description = "test4", IsAvailable = false };
+                // Act
+                HttpResponseMessage result = await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                // Assert
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists."));
+            }
+        }
+        [Test]
+        public async Task RemoveRoomByIdAsync_CheckRoomIsRemoved_ReturnNotFound()
+        {
+            using (_db)
+            {
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                RoomService service = new(_db);
+                Room roomToRemove = new() { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                HttpResponseMessage result = await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            }
+        }
+        [Test]
+        public async Task RemoveRoomByIdAsync_RoomRemove_ReturOK()
+        {
+            using(_db)
+            {
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                RoomService service = new(_db);
+                Room roomToRemove = new() { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                HttpResponseMessage result = await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            }
+        }
+        [Test]
+        public async Task RemoveRoomByIdAsync_RoomRemove_ReturnOKMessage()
+        {
+            using (_db)
+            {
+                
+                // Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                RoomService service = new(_db);
+                Room roomToRemove = new() { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false };
+                // Act
+                HttpResponseMessage result = await service.RemoveRoomByIdAsync(roomToRemove.Id);
+                // Assert
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully deleted."));
+            }
+        }
     }
 }
