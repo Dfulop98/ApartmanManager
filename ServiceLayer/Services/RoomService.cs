@@ -40,6 +40,27 @@ namespace ServiceLayer.Services
                 return CreateHttpResponseMessage(HttpStatusCode.Created, "The room successfully added.");
             }
         }
+        public async Task<HttpResponseMessage> UpdateRoomAsync(Room room)
+        {
+            bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
+            if (!roomExists) 
+            {
+                return CreateHttpResponseMessage(HttpStatusCode.NotFound, "Room doesnt exists.");
+            }
+            else
+            {
+                Room existingRoom = await _db.Rooms.Where(r => r.Id == room.Id).FirstAsync();
+                existingRoom.RoomNumber = room.RoomNumber;
+                existingRoom.Description = room.Description;
+                existingRoom.IsAvailable= room.IsAvailable;
+
+                await _db.SaveChangesAsync();
+                return CreateHttpResponseMessage(HttpStatusCode.OK, "Room succesfully updated.");
+            }
+            
+        }
+
+
 
         private static HttpResponseMessage CreateHttpResponseMessage(HttpStatusCode statusCode, string message)
         {

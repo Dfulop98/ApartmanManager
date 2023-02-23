@@ -11,5 +11,6 @@ namespace ServiceLayer.ServiceInterfaces
     {
         public Task<IEnumerable<Room>> GetAllRoomAsync();
         public Task<Room> GetRoomByIdAsync(int id);
+        public Task<Room> GetRoomByRoomNumberAsync(string roomNumber);
     }
 }

@@ -13,13 +13,12 @@ namespace DataAccessLayer.Models
         [MaxLength(50)]
         public string RoomNumber { get; set; }
 
-        [Required]
         public int Capacity { get; set; }
 
         [Required]
         public bool IsAvailable { get; set; }
 
-        [Required]
+        
         public decimal PricePerNight { get; set; }
 
         [Required]
