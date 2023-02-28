@@ -33,6 +33,12 @@ namespace ApartmanManagerApi.Controllers
         public async Task<ActionResult<Room>> GetRoomByRoomNumber(string roomNumber)
         {
             return Ok(await _roomService.GetRoomByRoomNumberAsync(roomNumber));
+        }
+        
+        [HttpPost("/api/room/add")]
+        public async Task<ActionResult<Room>> AddRoom([FromBody]Room room)
+        {
+            return Ok(await _roomService.AddRoomAsync(room));
         } 
 
 
