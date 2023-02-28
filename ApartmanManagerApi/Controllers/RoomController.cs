@@ -40,6 +40,12 @@ namespace ApartmanManagerApi.Controllers
         {
             return Ok(await _roomService.AddRoomAsync(room));
         } 
+        
+        [HttpPut("/api/room/update")]
+        public async Task<ActionResult<Room>> UpdateRoom([FromBody]Room room)
+        {
+            return Ok(await _roomService.UpdateRoomAsync(room));
+        } 
 
 
     }
