@@ -47,6 +47,12 @@ namespace ApartmanManagerApi.Controllers
             return Ok(await _roomService.UpdateRoomAsync(room));
         } 
 
+        [HttpDelete("/api/room/{id}")]
+        public async Task<ActionResult<Room>> DeleteRoom(int id)
+        {
+            return Ok(await _roomService.RemoveRoomByIdAsync(id));
+        } 
+
 
     }
 }
