@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer.Models;
+using DataModelLayer.Models;
 using System.Runtime.CompilerServices;
 
 namespace DataAccessLayer.DbAccess
@@ -17,9 +17,9 @@ namespace DataAccessLayer.DbAccess
         {
             base.OnModelCreating(modelBuilder);
         }
+        public DbSet<Room> Rooms { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Guest> Guests { get; set; }
-        public DbSet<Room> Rooms { get; set; }
         public DbSet<Payment> Payments { get; set; }
     }
 

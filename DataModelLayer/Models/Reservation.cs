@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace DataAccessLayer.Models
+namespace DataModelLayer.Models
 {
     public class Reservation
     {
