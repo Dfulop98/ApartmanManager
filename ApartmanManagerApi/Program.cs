@@ -12,7 +12,8 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 
 builder.Services.AddSingleton(builder.Configuration);
-builder.Services.AddDbContext<AMDbContext>();  
+builder.Services.AddDbContext<AMDbContext>( options =>
+    options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,6 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IRoomService, RoomService> ();
 var app = builder.Build();
 

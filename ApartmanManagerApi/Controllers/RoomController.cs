@@ -29,11 +29,11 @@ namespace ApartmanManagerApi.Controllers
             return Ok(await _roomService.GetRoomByIdAsync(id));
         } 
         
-        [HttpGet("/api/room/{roomNumber}")]
-        public async Task<ActionResult<Room>> GetRoomByRoomNumber(string roomNumber)
-        {
-            return Ok(await _roomService.GetRoomByRoomNumberAsync(roomNumber));
-        }
+        //[HttpGet("/api/room/{roomNumber}")]
+        //public async Task<ActionResult<Room>> GetRoomByRoomNumber(string roomNumber)
+        //{
+        //    return Ok(await _roomService.GetRoomByRoomNumberAsync(roomNumber));
+        //}
         
         [HttpPost("/api/room/add")]
         public async Task<ActionResult<Room>> AddRoom([FromBody]Room room)
