@@ -1,11 +1,12 @@
 using DataAccessLayer.DbAccess;
+using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Services;
 using System.Net;
 
 namespace Tests
 {
-    public class Tests
+    public class RoomServiceTests
     {
         private AMDbContext _db;
 
