@@ -18,7 +18,7 @@ namespace DataModelLayer.Models
         [Required]
         public bool IsAvailable { get; set; }
 
-        
+
         public decimal PricePerNight { get; set; }
 
         [Required]

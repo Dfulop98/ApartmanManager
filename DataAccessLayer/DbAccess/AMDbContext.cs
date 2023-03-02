@@ -1,17 +1,12 @@
-﻿
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using DataModelLayer.Models;
-using System.Runtime.CompilerServices;
 
 namespace DataAccessLayer.DbAccess
 {
     public class AMDbContext : DbContext
     {
 
-        public AMDbContext(DbContextOptions options) : base (options) {}
+        public AMDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

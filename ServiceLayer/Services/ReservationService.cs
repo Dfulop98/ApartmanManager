@@ -1,6 +1,6 @@
 ﻿namespace ServiceLayer.Services
 {
-    internal class UserService
+    internal class ReservationService
     {
     }
 }

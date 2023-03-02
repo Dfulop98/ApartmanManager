@@ -1,15 +1,9 @@
 ﻿using DataAccessLayer.DbAccess;
-using DataAccessLayer.Models;
+using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using ServiceLayer.ServiceInterfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
@@ -43,7 +37,7 @@ namespace ServiceLayer.Services
         public async Task<HttpResponseMessage> UpdateRoomAsync(Room room)
         {
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
-            if (!roomExists) 
+            if (!roomExists)
             {
                 return CreateHttpResponseMessage(HttpStatusCode.NotFound, "Room doesnt exists.");
             }
@@ -52,12 +46,12 @@ namespace ServiceLayer.Services
                 Room existingRoom = await _db.Rooms.Where(r => r.Id == room.Id).FirstAsync();
                 existingRoom.RoomNumber = room.RoomNumber;
                 existingRoom.Description = room.Description;
-                existingRoom.IsAvailable= room.IsAvailable;
+                existingRoom.IsAvailable = room.IsAvailable;
 
                 await _db.SaveChangesAsync();
                 return CreateHttpResponseMessage(HttpStatusCode.OK, "Room succesfully updated.");
             }
-            
+
         }
 
         public async Task<HttpResponseMessage> RemoveRoomByIdAsync(int id)

@@ -1,8 +1,6 @@
 
 using DataAccessLayer.DbAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using ApartmanManagerApi.Controllers;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
 
@@ -12,7 +10,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 
 builder.Services.AddSingleton(builder.Configuration);
-builder.Services.AddDbContext<AMDbContext>( options =>
+builder.Services.AddDbContext<AMDbContext>(options =>
     options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 
 builder.Services.AddControllers();
@@ -22,7 +20,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddTransient<IRoomService, RoomService> ();
+builder.Services.AddTransient<IRoomService, RoomService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

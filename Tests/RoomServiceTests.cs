@@ -1,5 +1,4 @@
 using DataAccessLayer.DbAccess;
-using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Services;
 using System.Net;
@@ -8,8 +7,8 @@ namespace Tests
 {
     public class Tests
     {
-        private AMDbContext _db; 
-        
+        private AMDbContext _db;
+
         [SetUp]
 
         public void Setup()
@@ -46,14 +45,14 @@ namespace Tests
                 Assert.That(result, Is.Not.Null);
             }
         }
-        
+
         [Test]
         public async Task GetAllRoomsAsync_IsEmpty_ReturnEmpty()
         {
             //Arrage
             using (_db)
             {
-                _db.Rooms.AddRange(new List<Room>{});
+                _db.Rooms.AddRange(new List<Room> { });
                 _db.SaveChanges();
 
                 RoomService service = new(_db);
@@ -77,7 +76,7 @@ namespace Tests
                     new Room { Id = 4, RoomNumber = "104", Description="test4", IsAvailable = true },
                 });
                 _db.SaveChanges();
-            
+
                 RoomService service = new(_db);
 
                 // Act
@@ -87,7 +86,7 @@ namespace Tests
                 Assert.That(result.Count(), Is.EqualTo(1));
             }
         }
-        
+
         [Test]
         public async Task GetAllRoomsAsync_HaveFourRoom_ReturnFourRoom()
         {
@@ -102,7 +101,7 @@ namespace Tests
                     new Room { Id = 4, RoomNumber = "104", Description="test4", IsAvailable = true },
                 });
                 _db.SaveChanges();
-            
+
                 RoomService service = new(_db);
 
                 // Act
@@ -112,7 +111,7 @@ namespace Tests
                 Assert.That(result.Count(), Is.EqualTo(4));
             }
         }
-        
+
         [Test]
         public async Task GetAllRoomsAsync_IsCorrectRoomId_ReturnSameRoomId()
         {
@@ -124,7 +123,7 @@ namespace Tests
                     new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false }
                 });
                 _db.SaveChanges();
-                
+
                 var testRoom = new List<Room>
                 {
                     new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false }
@@ -140,7 +139,7 @@ namespace Tests
                 Assert.That(result.First().Id, Is.EqualTo(testRoom.First().Id));
             }
         }
-        
+
         [Test]
         public async Task GetAllRoomsAsync_IsCorrectRoomNumber_ReturnSameRoomNumber()
         {
@@ -152,7 +151,7 @@ namespace Tests
                     new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false }
                 });
                 _db.SaveChanges();
-                
+
                 var testRoom = new List<Room>
                 {
                     new Room { Id = 1, RoomNumber = "101", Description = "test1", IsAvailable = false }
@@ -238,7 +237,7 @@ namespace Tests
                     new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
                 });
                 _db.SaveChanges();
-                
+
                 var testRoom = new List<Room>
                 {
                     new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
@@ -285,7 +284,7 @@ namespace Tests
             }
             return Task.CompletedTask;
         }
-        
+
         [Test]
         public Task GetRoomByIdAsync_RoomNotExist_ThrowsException()
         {
@@ -331,12 +330,12 @@ namespace Tests
                 RoomService service = new(_db);
                 // Act  
                 var result = await service.GetRoomByIdAsync(2);
-                    // Assert
+                // Assert
                 Assert.That(result.Id, Is.EqualTo(expected.Id));
-                
+
             }
         }
-        
+
         [Test]
         public async Task GetRoomByIdAsync_RoomNumberIsCorrect_ReturnCorrectRoomNumber()
         {
@@ -358,12 +357,12 @@ namespace Tests
                 RoomService service = new(_db);
                 // Act
                 var result = await service.GetRoomByIdAsync(3);
-                    // Assert
+                // Assert
                 Assert.That(result.RoomNumber, Is.EqualTo(expected.RoomNumber));
-                
+
             }
         }
-        
+
         [Test]
         public async Task GetRoomByIdAsync_DescriptionIsCorrect_ReturnCorrectDescription()
         {
@@ -385,12 +384,12 @@ namespace Tests
                 RoomService service = new(_db);
                 // Act
                 var result = await service.GetRoomByIdAsync(3);
-                    // Assert
+                // Assert
                 Assert.That(result.Description, Is.EqualTo(expected.Description));
-                
+
             }
         }
-        
+
         [Test]
         public async Task GetRoomByIdAsync_StatusIsCorrect_ReturnCorrectStatus()
         {
@@ -412,12 +411,12 @@ namespace Tests
                 RoomService service = new(_db);
                 // Act
                 var result = await service.GetRoomByIdAsync(3);
-                    // Assert
+                // Assert
                 Assert.That(result.IsAvailable, Is.EqualTo(expected.IsAvailable));
-                
+
             }
         }
-        
+
 
 
 
@@ -429,16 +428,16 @@ namespace Tests
             //Arrage
             using (_db)
             {
-                
+
 
                 RoomService service = new(_db);
-                
+
                 // Act & Assert
                 Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetRoomByRoomNumberAsync("101"));
             }
             return Task.CompletedTask;
         }
-        
+
         [Test]
         public Task GetRoomByRoomNumberAsync_RoomDoesntExist_ThrowsException()
         {
@@ -455,13 +454,13 @@ namespace Tests
                 _db.SaveChanges();
 
                 RoomService service = new(_db);
-                
+
                 // Act & Assert
                 Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetRoomByRoomNumberAsync("104"));
             }
             return Task.CompletedTask;
         }
-        
+
         [Test]
         public async Task GetRoomByRoomNumberAsync_RoomIdIsCorrect_ReturnCorrectRoomId()
         {
@@ -484,9 +483,9 @@ namespace Tests
                 // Assert
                 Assert.That(result.Id, Is.EqualTo(expected.Id));
             }
-            
+
         }
-        
+
         [Test]
         public async Task GetRoomByRoomNumberAsync_RoomNumberIsCorrect_ReturnsCorrectRoomNumber()
         {
@@ -509,9 +508,9 @@ namespace Tests
                 // Assert
                 Assert.That(result.RoomNumber, Is.EqualTo(expected.RoomNumber));
             }
-            
+
         }
-        
+
         [Test]
         public async Task GetRoomByRoomNumberAsync_DescriptionIsCorrect_ReturnCorrectDescription()
         {
@@ -534,9 +533,9 @@ namespace Tests
                 // Assert
                 Assert.That(result.Description, Is.EqualTo(expected.Description));
             }
-            
+
         }
-        
+
         [Test]
         public async Task GetRoomByRoomNumberAsync_StatusIsCorrect_ReturnCorrectStatus()
         {
@@ -560,7 +559,7 @@ namespace Tests
                 Assert.That(result.IsAvailable, Is.EqualTo(expected.IsAvailable));
 
             }
-            
+
         }
 
 
@@ -585,10 +584,10 @@ namespace Tests
                 var result = await service.AddRoomAsync(RoomToAdd);
                 //Assert
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
-                
+
             }
         }
-        
+
         [Test]
         public async Task AddRoom_RoomAlreadyExist_ReturnsCorrectConflictMessage()
         {
@@ -607,8 +606,8 @@ namespace Tests
                 // Act
                 var result = await service.AddRoomAsync(RoomToAdd);
                 //Assert
-                Assert.That(result.Content.ReadAsStringAsync ,Is.EqualTo("The room already exists."));
-                
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The room already exists."));
+
             }
         }
 
@@ -641,7 +640,7 @@ namespace Tests
                 var result = await service.AddRoomAsync(RoomToAdd);
                 //Assert
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-                
+
             }
         }
 
@@ -657,7 +656,7 @@ namespace Tests
                 var result = await service.AddRoomAsync(RoomToAdd);
                 //Assert
                 Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The room successfully added."));
-                
+
             }
         }
 
@@ -748,7 +747,7 @@ namespace Tests
                 var result = await service.UpdateRoomAsync(newRoom);
                 //Assert
                 Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully updated."));
- 
+
             }
         }
 
@@ -782,7 +781,7 @@ namespace Tests
         [Test]
         public async Task RemoveRoomByIdAsync_RoomDoesntExist_ReturnNotFound()
         {
-            using(_db)
+            using (_db)
             {
                 // Arrage
                 _db.Rooms.AddRange(new List<Room>
@@ -803,7 +802,7 @@ namespace Tests
         [Test]
         public async Task RemoveRoomByIdAsync_RoomDoesntExist_ReturnNotFoundMessage()
         {
-            using(_db)
+            using (_db)
             {
                 // Arrage
                 _db.Rooms.AddRange(new List<Room>
@@ -846,7 +845,7 @@ namespace Tests
         [Test]
         public async Task RemoveRoomByIdAsync_RoomRemove_ReturOK()
         {
-            using(_db)
+            using (_db)
             {
                 // Arrage
                 _db.Rooms.AddRange(new List<Room>
@@ -869,7 +868,7 @@ namespace Tests
         {
             using (_db)
             {
-                
+
                 // Arrage
                 _db.Rooms.AddRange(new List<Room>
                 {

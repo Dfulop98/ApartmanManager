@@ -6,8 +6,8 @@ namespace DataAccessLayer.DbAccess
 {
     public class AMDbContextFactory : IDesignTimeDbContextFactory<AMDbContext>
     {
-        
-        public AMDbContext CreateDbContext(string[] args) 
+
+        public AMDbContext CreateDbContext(string[] args)
         {
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -16,13 +16,13 @@ namespace DataAccessLayer.DbAccess
             .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<AMDbContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection") 
+            var connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string is null or empty.");
 
             optionsBuilder.UseNpgsql(connectionString);
 
             return new AMDbContext(optionsBuilder.Options);
         }
-        
+
     }
 }
