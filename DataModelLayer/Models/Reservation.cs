@@ -25,5 +25,8 @@ namespace DataModelLayer.Models
 
         [Required]
         public int NumberOfGuests { get; set; }
+
+        [Required]
+        public int RoomId { get; set; }
     }
 }
