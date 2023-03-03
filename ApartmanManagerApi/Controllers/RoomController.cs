@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataModelLayer.Models;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.ServiceInterfaces;
 
 namespace ApartmanManagerApi.Controllers
