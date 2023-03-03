@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccessLayer.Models;
+﻿using DataModelLayer.Models;
 namespace ServiceLayer.ServiceInterfaces
 {
-    public interface IBookingService
+    public interface IReservatonService
     {
         public void AddReservation();
         public void RemoveReservation();
