@@ -33,10 +33,11 @@ namespace Tests
                 //Arrage
                 _db.Rooms.AddRange(new List<Room>
                 {
-                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = true },
                     new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
                     new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
                 });
+                _db.SaveChanges();
                 ReservationService service = new(_db);
                 DateTime checkinDate = new (2008, 5, 1, 8, 30, 52);
                 DateTime checkoutDate = new (2008, 5, 4, 8, 30, 52);
@@ -52,10 +53,15 @@ namespace Tests
                 };
                 //Act
                 HttpResponseMessage result = await service.AddReservationAsync(newReservation);
-                //Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+                Assert.Multiple(() =>
+                {
+                    //Assert
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The reservation succefully added."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+                });
             }
         }
+        
         
         [Test]
         public async Task AddReservationAsync_WithExistingReservation_ReturnsConflict()
@@ -69,6 +75,7 @@ namespace Tests
                     new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
                     new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
                 });
+                _db.SaveChanges();
                 ReservationService service = new(_db);
                 DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
                 DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
@@ -95,8 +102,10 @@ namespace Tests
                         RoomId = 2,
                     },
                 });
+                _db.SaveChanges();
                 Reservation newReservation = new()
                 {
+                    Id = 1,
                     Name = "test name",
                     Email = "test@email.com",
                     Phone = "+36302642038",
@@ -107,23 +116,28 @@ namespace Tests
                 };
                 //Act
                 HttpResponseMessage result = await service.AddReservationAsync(newReservation);
-                //Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+                Assert.Multiple(() =>
+                {
+                    //Assert
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The reservation is already exists."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+                });
             }
         }
         
         [Test]
-        public async Task AddReservationAsync_WithInvalidReservationData_ReturnsBadRequest()
+        public async Task AddReservationAsync_WithInvalidReservationDate_ReturnsBadRequest()
         {
             using (_db)
             {
                 //Arrage
                 _db.Rooms.AddRange(new List<Room>
                 {
-                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = true },
                     new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
                     new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
                 });
+                _db.SaveChanges();
                 ReservationService service = new(_db);
                 DateTime checkinDate = new(2024, 5, 1, 8, 30, 52);
                 DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
@@ -139,8 +153,49 @@ namespace Tests
                 };
                 //Act
                 HttpResponseMessage result = await service.AddReservationAsync(newReservation);
-                //Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                Assert.Multiple(() =>
+                {
+                    //Assert
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The reservation dates incorrect."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                });
+            }
+        }
+        
+        [Test]
+        public async Task AddReservationAsync_WithInvalidReservationRoom_ReturnsBadRequest()
+        {
+            using (_db)
+            {
+                //Arrage
+                _db.Rooms.AddRange(new List<Room>
+                {
+                    new Room { Id = 1, RoomNumber = "101", Description="test1", IsAvailable = false },
+                    new Room { Id = 2, RoomNumber = "102", Description="test2", IsAvailable = true },
+                    new Room { Id = 3, RoomNumber = "103", Description="test3", IsAvailable = false }
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                Reservation newReservation = new()
+                {
+                    Name = "123",
+                    Email = "test@email.com",
+                    Phone = "+36302642038",
+                    CheckInDate = checkinDate,
+                    CheckOutDate = checkoutDate,
+                    NumberOfGuests = 1,
+                    RoomId = 1,
+                };
+                //Act
+                HttpResponseMessage result = await service.AddReservationAsync(newReservation);
+                Assert.Multiple(() =>
+                {
+                    //Assert
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("This room is not available at the moment."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                });
             }
         }
         
@@ -165,8 +220,12 @@ namespace Tests
                 };
                 //Act
                 HttpResponseMessage result = await service.AddReservationAsync(newReservation);
-                //Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                Assert.Multiple(() =>
+                {
+                    //Assert
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The room doesnt exists."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                });
             }
         }
     }

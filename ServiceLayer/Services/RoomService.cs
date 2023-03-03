@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.DbAccess;
 using DataModelLayer.Models;
+using ServiceLayer.Factories;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.ServiceInterfaces;
 using System.Data;
@@ -25,13 +26,15 @@ namespace ServiceLayer.Services
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
             if (roomExists)
             {
-                return CreateHttpResponseMessage(HttpStatusCode.Conflict, "The room already exists.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.Conflict, "The room already exists.");
             }
             else
             {
                 await _db.Rooms.AddAsync(room);
                 await _db.SaveChangesAsync();
-                return CreateHttpResponseMessage(HttpStatusCode.Created, "The room successfully added.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.Created, "The room successfully added.");
             }
         }
         public async Task<HttpResponseMessage> UpdateRoomAsync(Room room)
@@ -39,7 +42,8 @@ namespace ServiceLayer.Services
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
             if (!roomExists)
             {
-                return CreateHttpResponseMessage(HttpStatusCode.NotFound, "Room doesnt exists.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Room doesnt exists.");
             }
             else
             {
@@ -49,7 +53,8 @@ namespace ServiceLayer.Services
                 existingRoom.IsAvailable = room.IsAvailable;
 
                 await _db.SaveChangesAsync();
-                return CreateHttpResponseMessage(HttpStatusCode.OK, "Room succesfully updated.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Room succesfully updated.");
             }
 
         }
@@ -59,25 +64,20 @@ namespace ServiceLayer.Services
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == id);
             if (!roomExists)
             {
-                return CreateHttpResponseMessage(HttpStatusCode.NotFound, "Room doesnt exists.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Room doesnt exists.");
             }
             else
             {
                 Room existingRoom = await _db.Rooms.Where(r => r.Id == id).FirstAsync();
                 _db.Rooms.Remove(existingRoom);
                 await _db.SaveChangesAsync();
-                return CreateHttpResponseMessage(HttpStatusCode.OK, "Room succesfully deleted.");
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Room succesfully deleted.");
             }
         }
 
-        private static HttpResponseMessage CreateHttpResponseMessage(HttpStatusCode statusCode, string message)
-        {
-            HttpResponseMessage response = new(statusCode)
-            {
-                Content = new StringContent(message)
-            };
-            return response;
-        }
+        
 
     }
 }
