@@ -21,6 +21,28 @@ namespace Tests
                 .Options;
             _db = new AMDbContext(options);
         }
+        [Test]
+        public async Task GetReservationsAsync_ListIsEmpty_ReturnNotFound()
+        {
+            using (_db)
+            {
+                ReservationService service = new(_db);
+                //Act
+                HttpResponseMessage result = await service.GetReservationsAsync();
+                //Assert
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The reservation succefully added."));
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+                });
+            }
+        }
+
+        [Test]
+        public async Task GetReservationsAsync_()
+        {
+
+        }
 
         [Test]
         public async Task AddReservationAsync_WithValidReservationData_ReturnsSuccess()

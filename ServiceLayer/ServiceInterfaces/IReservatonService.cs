@@ -3,11 +3,11 @@ namespace ServiceLayer.ServiceInterfaces
 {
     public interface IReservatonService
     {
-        public void AddReservation();
-        public void RemoveReservation();
-        public void UpdateReservation();
+        public Task<IEnumerable<Reservation>> GetReservationsAsync();
+        public Task<Reservation> GetReservationByIdAsync(int id);
+        public Task<HttpResponseMessage> AddReservationAsync(Reservation reservation);
+        public Task<HttpResponseMessage> RemoveReservationAsync(int id);
+        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation);
 
-        public List<Reservation> GetReservations();
-        public Reservation GetReservationById(int id);
     }
 }
