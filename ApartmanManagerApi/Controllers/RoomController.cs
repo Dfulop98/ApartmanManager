@@ -34,19 +34,19 @@ namespace ApartmanManagerApi.Controllers
         //}
 
         [HttpPost("/api/room/add")]
-        public async Task<ActionResult<Room>> AddRoom([FromBody] Room room)
+        public async Task<ActionResult> AddRoom([FromBody] Room room)
         {
             return Ok(await _roomService.AddRoomAsync(room));
         }
 
         [HttpPut("/api/room/update")]
-        public async Task<ActionResult<Room>> UpdateRoom([FromBody] Room room)
+        public async Task<ActionResult> UpdateRoom([FromBody] Room room)
         {
             return Ok(await _roomService.UpdateRoomAsync(room));
         }
 
         [HttpDelete("/api/room/remove/{id}")]
-        public async Task<ActionResult<Room>> DeleteRoom(int id)
+        public async Task<ActionResult> DeleteRoom(int id)
         {
             return Ok(await _roomService.RemoveRoomByIdAsync(id));
         }
