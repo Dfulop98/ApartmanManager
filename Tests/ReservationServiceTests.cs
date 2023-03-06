@@ -549,7 +549,7 @@ namespace Tests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists"));
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation doesnt exists."));
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
             });
         }
@@ -604,11 +604,13 @@ namespace Tests
             };
             var result = await service.UpdateReservationAsync(newReservation);
 
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation succesfully updated"));
-
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation succesfully updated."));
+            });
         }
-        
+
         [Test]
         public async Task UpdateReservationAsync_ReservationSuccesfullyUpdate_ReturnsCorrectReservation()
         {
@@ -648,7 +650,7 @@ namespace Tests
             Reservation expectedReservation = new()
             {
                 Id = 1,
-                Name = "test name5",
+                Name = "test name",
                 Email = "test5@email.com",
                 Phone = "+36302642038",
                 CheckInDate = checkinDate,
@@ -663,51 +665,51 @@ namespace Tests
         }
 
 
-        [Test]
-        public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFound()
-        {
-            using (_db)
-            {
-                // Arrage
-                // Act
-                // Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            }
-        }
-        [Test]
-        public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFoundMessage()
-        {
-            using (_db)
-            {
-                // Arrage
-                // Act
-                // Assert
-                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists."));
-            }
-        }
-        [Test]
-        public async Task RemoveReservationByIdAsync_CheckReservationIsRemoved_ReturnNotFound()
-        {
-            using (_db)
-            {
-                // Arrage
-                // Act
-                // Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            }
-        }
-        [Test]
-        public async Task RemoveReservationByIdAsync_ReservationRemove_ReturOK()
-        {
-            using (_db)
-            {
-                // Arrage
-                // Act
-                // Assert
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully deleted."));
-            }
-        }
+        //[Test]
+        //public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFound()
+        //{
+        //    using (_db)
+        //    {
+        //        // Arrage
+        //        // Act
+        //        // Assert
+        //        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        //    }
+        //}
+        //[Test]
+        //public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFoundMessage()
+        //{
+        //    using (_db)
+        //    {
+        //        // Arrage
+        //        // Act
+        //        // Assert
+        //        Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists."));
+        //    }
+        //}
+        //[Test]
+        //public async Task RemoveReservationByIdAsync_CheckReservationIsRemoved_ReturnNotFound()
+        //{
+        //    using (_db)
+        //    {
+        //        // Arrage
+        //        // Act
+        //        // Assert
+        //        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        //    }
+        //}
+        //[Test]
+        //public async Task RemoveReservationByIdAsync_ReservationRemove_ReturOK()
+        //{
+        //    using (_db)
+        //    {
+        //        // Arrage
+        //        // Act
+        //        // Assert
+        //        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        //        Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully deleted."));
+        //    }
+        //}
        
     }
 }

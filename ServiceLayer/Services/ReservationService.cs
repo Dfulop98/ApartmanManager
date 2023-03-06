@@ -54,9 +54,29 @@ namespace ServiceLayer.Services
             }
         }
 
-        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
+        public async Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
         {
-            throw new NotImplementedException();
+            bool reservationExists = await _db.Reservations.AnyAsync(r => r.Id == reservation.Id);
+            if (!reservationExists)
+            {
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Reservation doesnt exists.");
+            }
+            else
+            {
+                Reservation existingReservation = await _db.Reservations.Where(r => r.Id == reservation.Id).FirstAsync();
+                existingReservation.Name = reservation.Name;
+                existingReservation.Email = reservation.Email;
+                existingReservation.Phone = reservation.Phone;
+                existingReservation.CheckInDate = reservation.CheckInDate;
+                existingReservation.CheckOutDate = reservation.CheckOutDate;
+                existingReservation.NumberOfGuests = reservation.NumberOfGuests;
+                existingReservation.RoomId = reservation.RoomId;
+                _db.SaveChanges();
+
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Reservation succesfully updated.");
+            }
         }
       
         public Task<HttpResponseMessage> RemoveReservationAsync(int id)
