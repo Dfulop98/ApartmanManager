@@ -34,7 +34,7 @@ namespace ApartmanManagerApi.Controllers
         //}
 
         [HttpPost("/api/room/add")]
-        public async Task<ActionResult<Room>> AddRoom([FromBody] Room room)
+        public async Task<ActionResult> AddRoom([FromBody] Room room)
         {
             return Ok(await _roomService.AddRoomAsync(room));
         }
