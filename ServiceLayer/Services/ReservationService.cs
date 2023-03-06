@@ -54,26 +54,15 @@ namespace ServiceLayer.Services
             }
         }
 
-       
-
-        public Task<HttpResponseMessage> RemoveReservationAsync()
+        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
         {
             throw new NotImplementedException();
         }
-
-        public Task<HttpResponseMessage> UpdateReservationAsync()
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public Task<HttpResponseMessage> RemoveReservationAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
