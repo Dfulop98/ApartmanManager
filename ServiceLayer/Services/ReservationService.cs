@@ -2,17 +2,22 @@
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Factories;
+using ServiceLayer.ServiceInterfaces;
 using System.Net;
 
 namespace ServiceLayer.Services
 {
-    public class ReservationService
+    public class ReservationService : IReservatonService
     {
         private readonly AMDbContext _db;
         public ReservationService(AMDbContext db)
         {
             _db = db;
         }
+
+        public async Task<IEnumerable<Reservation>> GetReservationsAsync() => await _db.Reservations.ToListAsync();
+        public async Task<Reservation> GetReservationByIdAsync(int id) => await _db.Reservations.Where(r => r.Id == id).FirstAsync();
+        
 
         public async Task<HttpResponseMessage> AddReservationAsync(Reservation reservation)
         {
@@ -48,5 +53,16 @@ namespace ServiceLayer.Services
                     (HttpStatusCode.BadRequest, "The room doesnt exists.");
             }
         }
+
+        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
+        {
+            throw new NotImplementedException();
+        }
+      
+        public Task<HttpResponseMessage> RemoveReservationAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
