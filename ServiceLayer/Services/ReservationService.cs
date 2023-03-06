@@ -15,10 +15,9 @@ namespace ServiceLayer.Services
             _db = db;
         }
 
-        public Task<IEnumerable<Reservation>> GetReservationsAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Reservation>> GetReservationsAsync() => await _db.Reservations.ToListAsync();
+        public async Task<Reservation> GetReservationByIdAsync(int id) => await _db.Reservations.Where(r => r.Id == id).FirstAsync();
+        
 
         public async Task<HttpResponseMessage> AddReservationAsync(Reservation reservation)
         {
@@ -56,10 +55,6 @@ namespace ServiceLayer.Services
         }
 
        
-        public Task<Reservation> GetReservationByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<HttpResponseMessage> RemoveReservationAsync()
         {
@@ -67,6 +62,16 @@ namespace ServiceLayer.Services
         }
 
         public Task<HttpResponseMessage> UpdateReservationAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HttpResponseMessage> RemoveReservationAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
         {
             throw new NotImplementedException();
         }

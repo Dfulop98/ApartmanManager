@@ -25,27 +25,297 @@ namespace Tests
             _db = new AMDbContext(options);
         }
         [Test]
-        public async Task GetReservationsAsync_ListIsEmpty_ReturnNotFound()
+        public async Task GetReservationsAsync_ListIsNotEmpty_ReturnNotNull()
+        {
+            using (_db)
+            {
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
+                {
+                    new Reservation
+                    {
+                        Name = "test name",
+                        Email = "test@email.com",
+                        Phone = "+36302642038",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 1,
+                        RoomId = 1,
+                    },
+                    new Reservation
+                    {
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                //Act
+
+                IEnumerable<Reservation> result = await service.GetReservationsAsync();
+                //Assert
+                Assert.That(result, Is.Not.Null);
+
+            }
+        }
+
+        [Test]
+        public async Task GetReservationsAsync_ListIsEmpty_ReturnEmpty()
         {
             using (_db)
             {
                 ReservationService service = new(_db);
                 //Act
-                HttpResponseMessage result = await service.GetReservationsAsync();
+
+                IEnumerable<Reservation> result = await service.GetReservationsAsync();
                 //Assert
-                Assert.Multiple(() =>
+                Assert.That(result, Is.Empty);
+
+            }
+        }
+        
+        [Test]
+        public async Task GetReservationsAsync_HaveOneReservation_ReturnOneReservation()
+        {
+            using (_db)
+            {
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
                 {
-                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The reservation succefully added."));
-                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+                    
+                    new Reservation
+                    {
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
                 });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                //Act
+
+                IEnumerable<Reservation> result = await service.GetReservationsAsync();
+                //Assert
+                Assert.That(result.Count(), Is.EqualTo(1));
+
+            }
+        }
+        
+        [Test]
+        public async Task GetReservationsAsync_HaveFourReservation_ReturnFourReservation()
+        {
+            using (_db)
+            {
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
+                {
+                    
+                    new Reservation
+                    {
+                        Name = "test name1",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 4,
+                    },
+                    new Reservation
+                    {
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 3,
+                    },
+                    
+                    new Reservation
+                    {
+                        Name = "test name3",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                    
+                    new Reservation
+                    {
+                        Name = "test name4",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 1,
+                    },
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                //Act
+
+                IEnumerable<Reservation> result = await service.GetReservationsAsync();
+                //Assert
+                Assert.That(result.Count(), Is.EqualTo(4));
+
             }
         }
 
         [Test]
-        public async Task GetReservationsAsync_()
+        public async Task GetReservationsAsync_IsCorrectReservationId_ReturnSameReservation()
         {
+            using (_db)
+            {
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
+                {
 
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+
+                var expectedReservation = new List<Reservation>
+                {
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    }
+                };
+                //Act
+                IEnumerable<Reservation> result = await service.GetReservationsAsync();
+                //Assert
+                Assert.That(result.First().Id, Is.EqualTo(expectedReservation.First().Id));
+            }
         }
+
+        [Test]
+        public Task GetReservationByIdAsync_EmptyResevationList_ThrowsException()
+        {
+            //Arrage
+            using (_db)
+            {
+                // Arrage
+                ReservationService service = new(_db);
+                // Act & Assert
+                Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetReservationByIdAsync(1));
+
+            }
+            return Task.CompletedTask;
+        }
+        
+        [Test]
+        public Task GetReservationByIdAsync_ResevationNotExists_ThrowsException()
+        {
+            //Arrage
+            using (_db)
+            {
+                // Arrage
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
+                {
+
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                // Act & Assert
+                Assert.ThrowsAsync<InvalidOperationException>(async () => await service.GetReservationByIdAsync(5));
+
+            }
+            return Task.CompletedTask;
+        }
+        
+        [Test]
+        public async Task GetReservationByIdAsync_ResevationIdIsCorrect_ReturnCorrectReservatioId()
+        {
+            //Arrage
+            using (_db)
+            {
+                // Arrage
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+                _db.Reservations.AddRange(new List<Reservation>
+                {
+
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+                _db.SaveChanges();
+                ReservationService service = new(_db);
+                // Act
+                var result = await service.GetReservationByIdAsync(1);
+                var expectedReservation = new Reservation
+                {
+                    Id = 1,
+                    Name = "test name2",
+                    Email = "test2@email.com",
+                    Phone = "+36302642037",
+                    CheckInDate = checkinDate,
+                    CheckOutDate = checkoutDate,
+                    NumberOfGuests = 2,
+                    RoomId = 2,
+                };
+
+                // Assert
+                Assert.That(result.Id, Is.EqualTo(expectedReservation.Id));
+
+            }
+        }
+
 
         [Test]
         public async Task AddReservationAsync_WithValidReservationData_ReturnsSuccess()
@@ -227,7 +497,6 @@ namespace Tests
             using (_db)
             {
                 //Arrage
-                ReservationService service = new(_db);
                 DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
                 DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
                 Reservation newReservation = new()
@@ -241,6 +510,7 @@ namespace Tests
                     RoomId = 20,
                 };
                 //Act
+                ReservationService service = new(_db);
                 HttpResponseMessage result = await service.AddReservationAsync(newReservation);
                 Assert.Multiple(() =>
                 {
@@ -250,5 +520,194 @@ namespace Tests
                 });
             }
         }
+
+
+        [Test]
+        public async Task UpdateReservationAsync_ReservationDoesntExists_ReturnsNotFound()
+        {
+            // Arrage
+
+            DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+            DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+
+            ReservationService service = new(_db);
+            Reservation newReservation = new()
+            {
+                Id = 5,
+                Name = "123",
+                Email = "test@email.com",
+                Phone = "+36302642038",
+                CheckInDate = checkinDate,
+                CheckOutDate = checkoutDate,
+                NumberOfGuests = 1,
+                RoomId = 20,
+            };
+            
+            // Act
+            var result = await service.UpdateReservationAsync(newReservation);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists"));
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            });
+        }
+
+        [Test]
+        public async Task UpdateReservationAsync_ReservationSuccesfullyUpdate_ReturnsOk()
+        {
+            //Arrage
+            DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+            DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+            _db.Reservations.AddRange(new List<Reservation>
+                {
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name",
+                        Email = "test@email.com",
+                        Phone = "+36302642038",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 1,
+                        RoomId = 1,
+                    },
+
+                    new Reservation
+                    {   
+                        Id = 2,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+
+            _db.SaveChanges();
+
+            ReservationService service = new(_db);
+
+            Reservation newReservation = new()
+            {   
+                Id = 1,
+                Name = "123",
+                Email = "test@email.com",
+                Phone = "+36302642038",
+                CheckInDate = checkinDate,
+                CheckOutDate = checkoutDate,
+                NumberOfGuests = 1,
+                RoomId = 20,
+            };
+            var result = await service.UpdateReservationAsync(newReservation);
+
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation succesfully updated"));
+
+        }
+        
+        [Test]
+        public async Task UpdateReservationAsync_ReservationSuccesfullyUpdate_ReturnsCorrectReservation()
+        {
+            //Arrage
+            DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+            DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+            _db.Reservations.AddRange(new List<Reservation>
+                {
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name",
+                        Email = "test@email.com",
+                        Phone = "+36302642038",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 1,
+                        RoomId = 1,
+                    },
+                    new Reservation
+                    {
+                        Id = 2,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+            _db.SaveChanges();
+
+            //Act
+
+            ReservationService Service = new(_db);
+            Reservation expectedReservation = new()
+            {
+                Id = 1,
+                Name = "test name5",
+                Email = "test5@email.com",
+                Phone = "+36302642038",
+                CheckInDate = checkinDate,
+                CheckOutDate = checkoutDate,
+                NumberOfGuests = 5,
+                RoomId = 2,
+            };
+            await Service.UpdateReservationAsync(expectedReservation);
+            var result = await Service.GetReservationByIdAsync(expectedReservation.Id);
+
+            Assert.That(result.Name, Is.EqualTo(expectedReservation.Name));
+        }
+
+
+        [Test]
+        public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFound()
+        {
+            using (_db)
+            {
+                // Arrage
+                // Act
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            }
+        }
+        [Test]
+        public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFoundMessage()
+        {
+            using (_db)
+            {
+                // Arrage
+                // Act
+                // Assert
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room doesnt exists."));
+            }
+        }
+        [Test]
+        public async Task RemoveReservationByIdAsync_CheckReservationIsRemoved_ReturnNotFound()
+        {
+            using (_db)
+            {
+                // Arrage
+                // Act
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            }
+        }
+        [Test]
+        public async Task RemoveReservationByIdAsync_ReservationRemove_ReturOK()
+        {
+            using (_db)
+            {
+                // Arrage
+                // Act
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully deleted."));
+            }
+        }
+       
     }
 }
