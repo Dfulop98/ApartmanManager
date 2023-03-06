@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.DbAccess;
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using ServiceLayer.Services;
 using System;
 using System.Collections.Generic;
@@ -665,17 +666,65 @@ namespace Tests
         }
 
 
-        //[Test]
-        //public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFound()
-        //{
-        //    using (_db)
-        //    {
-        //        // Arrage
-        //        // Act
-        //        // Assert
-        //        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-        //    }
-        //}
+        [Test]
+        public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFound()
+        {
+            using (_db)
+            {
+                // Arrage
+                DateTime checkinDate = new(2008, 5, 1, 8, 30, 52);
+                DateTime checkoutDate = new(2008, 5, 4, 8, 30, 52);
+
+                _db.Reservations.AddRange(new List<Reservation>
+                {
+                    new Reservation
+                    {
+                        Id = 1,
+                        Name = "test name",
+                        Email = "test@email.com",
+                        Phone = "+36302642038",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 1,
+                        RoomId = 1,
+                    },
+                    new Reservation
+                    {
+                        Id = 2,
+                        Name = "test name2",
+                        Email = "test2@email.com",
+                        Phone = "+36302642037",
+                        CheckInDate = checkinDate,
+                        CheckOutDate = checkoutDate,
+                        NumberOfGuests = 2,
+                        RoomId = 2,
+                    },
+                });
+                _db.SaveChanges();
+
+                ReservationService service = new(_db);
+                Reservation resertvationToRemove = new()
+                {
+                    Id = 3,
+                    Name = "test name2",
+                    Email = "test2@email.com",
+                    Phone = "+36302642037",
+                    CheckInDate = checkinDate,
+                    CheckOutDate = checkoutDate,
+                    NumberOfGuests = 2,
+                    RoomId = 2,
+                };
+                // Act
+                HttpResponseMessage result = await service.RemoveReservationAsync(resertvationToRemove.Id);
+
+                Assert.Multiple(() =>
+                {
+                    // Assert
+                    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation doesnt exists."));
+                });
+            }
+        }
         //[Test]
         //public async Task RemoveReservationByIdAsync_ReservationDoesntExist_ReturnNotFoundMessage()
         //{
@@ -710,6 +759,6 @@ namespace Tests
         //        Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully deleted."));
         //    }
         //}
-       
+
     }
 }
