@@ -79,9 +79,22 @@ namespace ServiceLayer.Services
             }
         }
       
-        public Task<HttpResponseMessage> RemoveReservationAsync(int id)
+        public async Task<HttpResponseMessage> RemoveReservationAsync(int id)
         {
-            throw new NotImplementedException();
+            bool reservationExists = await _db.Reservations.AnyAsync(r => r.Id == id);
+            if (!reservationExists)
+            {
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Reservation doesnt exists.");
+            }
+            else
+            {
+                Reservation existingReservation = await _db.Reservations.Where(r => r.Id == id).FirstAsync();
+                _db.Reservations.Remove(existingReservation);
+                await _db.SaveChangesAsync();
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Reservation succesfully deleted.");
+            }
         }
 
     }
