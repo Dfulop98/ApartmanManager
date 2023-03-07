@@ -2,11 +2,12 @@
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Factories;
+using ServiceLayer.ServiceInterfaces;
 using System.Net;
 
 namespace ServiceLayer.Services
 {
-    public class GuestService
+    public class GuestService : IGuestService
     {
         private readonly AMDbContext _db;
 
