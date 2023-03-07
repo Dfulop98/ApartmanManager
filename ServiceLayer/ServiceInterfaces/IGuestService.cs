@@ -1,6 +1,6 @@
 ﻿namespace ServiceLayer.ServiceInterfaces
 {
-    internal interface IUserService
+    public interface IGuestService
     {
     }
 }

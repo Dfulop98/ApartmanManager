@@ -272,7 +272,7 @@ namespace Tests
         }
         
         [Test]
-        public async Task GetReservationByIdAsync_ResevationIdIsCorrect_ReturnCorrectReservatioId()
+        public async Task GetReservationByIdAsync_ResevationIdIsCorrect_ReturnCorrectReservationId()
         {
             //Arrage
             using (_db)
