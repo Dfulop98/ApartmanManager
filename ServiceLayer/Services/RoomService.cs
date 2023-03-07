@@ -18,9 +18,9 @@ namespace ServiceLayer.Services
 
         public async Task<IEnumerable<Room>> GetAllRoomAsync() => await _db.Rooms.ToListAsync();
 
-        public async Task<Room> GetRoomByIdAsync(int id) => await _db.Rooms.Where(x => x.Id == id).FirstAsync();
+        public Task<Room> GetRoomByIdAsync(int id) =>  _db.Rooms.Where(x => x.Id == id).FirstAsync();
 
-        public async Task<Room> GetRoomByRoomNumberAsync(string roomNumber) => await _db.Rooms.Where(x => x.RoomNumber == roomNumber).FirstAsync();
+        public Task<Room> GetRoomByRoomNumberAsync(string roomNumber) => _db.Rooms.Where(x => x.RoomNumber == roomNumber).FirstAsync();
         public async Task<HttpResponseMessage> AddRoomAsync(Room room)
         {
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
