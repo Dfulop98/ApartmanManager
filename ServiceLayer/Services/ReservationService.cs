@@ -75,7 +75,7 @@ namespace ServiceLayer.Services
                 _db.SaveChanges();
 
                 return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Reservation succesfully updated.");
+                    (HttpStatusCode.OK, "Reservation successfully updated.");
             }
         }
       
@@ -93,7 +93,7 @@ namespace ServiceLayer.Services
                 _db.Reservations.Remove(existingReservation);
                 await _db.SaveChangesAsync();
                 return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Reservation succesfully deleted.");
+                    (HttpStatusCode.OK, "Reservation successfully deleted.");
             }
         }
 
