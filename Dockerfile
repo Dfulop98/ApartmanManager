@@ -26,7 +26,7 @@ RUN dotnet publish -c Release -o out
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime-env
 WORKDIR /app
-EXPOSE 7223
+EXPOSE 80
 
 COPY --from=build-env /app/out ./
 
