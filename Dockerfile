@@ -6,7 +6,28 @@ COPY . .
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+# Build image
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
-COPY --from=build /app/out ./
-ENTRYPOINT [ "dotnet","ApartmanManagerApi.dll" ]
+
+COPY *.sln ./
+COPY ApartmanManagerApi/*.csproj ./ApartmanManagerApi/
+COPY DataAccessLayer/*.csproj ./DataAccessLayer/
+COPY DataModelLayer/*.csproj ./DataModelLayer/
+COPY ServiceLayer/*.csproj ./ServiceLayer/
+COPY Tests/*.csproj ./Tests/
+
+RUN dotnet restore
+
+COPY . ./
+
+RUN dotnet publish -c Release -o out
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime-env
+WORKDIR /app
+EXPOSE 7223
+
+COPY --from=build-env /app/out ./
+
+ENTRYPOINT ["dotnet", "ApartmanManagerApi.dll"]
