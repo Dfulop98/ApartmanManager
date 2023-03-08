@@ -608,7 +608,7 @@ namespace Tests
             Assert.Multiple(() =>
             {
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation succesfully updated."));
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation successfully updated."));
             });
         }
 
@@ -840,7 +840,7 @@ namespace Tests
                 {
                     // Assert
                     Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation succesfully deleted."));
+                    Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Reservation successfully deleted."));
                 });
             }
         }

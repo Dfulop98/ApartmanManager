@@ -54,7 +54,7 @@ namespace ServiceLayer.Services
 
                 await _db.SaveChangesAsync();
                 return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Room succesfully updated.");
+                    (HttpStatusCode.OK, "Room successfully updated.");
             }
 
         }
