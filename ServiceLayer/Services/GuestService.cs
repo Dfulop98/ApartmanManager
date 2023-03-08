@@ -57,5 +57,23 @@ namespace ServiceLayer.Services
                     (HttpStatusCode.OK, "Guest successfully updated.");
             }
         }
+
+        public async Task<HttpResponseMessage> RemoveGuestByIdAsync(int id)
+        {
+            bool guestExists = await _db.Guests.AnyAsync(g => g.Id == id);
+            if (!guestExists)
+            {
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Guest doesnt exists.");
+            }
+            else
+            {
+                Guest existingGuest = await _db.Guests.Where(g => g.Id == id).FirstAsync();
+                _db.Guests.Remove(existingGuest);
+                await _db.SaveChangesAsync();
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Guest successfully deleted.");
+            }
+        }
     }
 }
