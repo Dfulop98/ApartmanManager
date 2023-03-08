@@ -1,0 +1,11 @@
+# ignore files and folders
+.vscode
+bin
+obj
+node_modules
+packages
+*.log
+
+# ignore specific files
+Dockerfile
+.dockerignore
