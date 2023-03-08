@@ -35,5 +35,27 @@ namespace ServiceLayer.Services
                     (HttpStatusCode.Created, "The guest successfully added.");
             }
         }
+
+        public async Task<HttpResponseMessage> UpdateGuestAsync(Guest guest)
+        {
+            bool guestExists = await _db.Guests.AnyAsync(g => g.Id == guest.Id);
+            if (!guestExists)
+            {
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.NotFound, "Guest doesnt exists.");
+            }
+            else
+            {
+                Guest existingGuest = await _db.Guests.Where(g => g.Id == guest.Id).FirstAsync();
+                existingGuest.Address = guest.Address;
+                existingGuest.Name = guest.Name;
+                existingGuest.Phone= guest.Phone;
+                existingGuest.Email = guest.Email;
+                existingGuest.Nationatily = guest.Nationatily;
+                await _db.SaveChangesAsync();
+                return HttpResponseMessageFactory.CreateHttpResponseMessage
+                    (HttpStatusCode.OK, "Guest successfully updated.");
+            }
+        }
     }
 }

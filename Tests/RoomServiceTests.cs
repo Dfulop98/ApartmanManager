@@ -747,7 +747,7 @@ namespace Tests
                 // Act
                 var result = await service.UpdateRoomAsync(newRoom);
                 //Assert
-                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room succesfully updated."));
+                Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("Room successfully updated."));
 
             }
         }
