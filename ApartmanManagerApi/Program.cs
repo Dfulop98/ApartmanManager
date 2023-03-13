@@ -1,5 +1,7 @@
 
 using DataAccessLayer.DbAccess;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.Operations;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
@@ -20,6 +22,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IRoomDataAccess, RoomDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
 var app = builder.Build();
 
