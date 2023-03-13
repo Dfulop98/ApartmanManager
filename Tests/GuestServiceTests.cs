@@ -344,6 +344,7 @@ namespace Tests
                 HttpResponseMessage result = await service.AddGuestAsync(newGuest);
                 Assert.Multiple(() =>
                 {
+
                     //Assert
                     Assert.That(result.Content.ReadAsStringAsync, Is.EqualTo("The guest successfully added."));
                     Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));

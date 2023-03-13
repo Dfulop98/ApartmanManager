@@ -5,38 +5,50 @@ using Microsoft.EntityFrameworkCore;
 using ServiceLayer.ServiceInterfaces;
 using System.Data;
 using System.Net;
+using DataAccessLayer.Operations;
+using DataAccessLayer.Interfaces;
+using System.ComponentModel;
+using ServiceLayer.Models;
 
 namespace ServiceLayer.Services
 {
     public class RoomService : IRoomService
     {
-        private readonly AMDbContext _db;
-        public RoomService(AMDbContext db)
+        private readonly IRoomDataAccess _context;
+        public RoomService(IRoomDataAccess roomDataAccess)
         {
-            _db = db;
+            _context = roomDataAccess;
         }
 
-        public async Task<IEnumerable<Room>> GetAllRoomAsync() => await _db.Rooms.ToListAsync();
-
-        public Task<Room> GetRoomByIdAsync(int id) =>  _db.Rooms.Where(x => x.Id == id).FirstAsync();
-
-        public Task<Room> GetRoomByRoomNumberAsync(string roomNumber) => _db.Rooms.Where(x => x.RoomNumber == roomNumber).FirstAsync();
-        public async Task<HttpResponseMessage> AddRoomAsync(Room room)
+        public List<Room> GetRooms() => _context.GetRooms();
+        public ResponseModel GetRoom(int id)
         {
-            bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);
+            bool roomExists = _context.CheckRoom(id);
             if (roomExists)
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.Conflict, "The room already exists.");
+                Room room = _context.GetRoom(id);
+                return new ResponseModel("Success", "The room successfully added.", room);
             }
             else
             {
-                await _db.Rooms.AddAsync(room);
-                await _db.SaveChangesAsync();
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.Created, "The room successfully added.");
+                return new ResponseModel("NotFound", "The room is doesnt exists");
+            }
+
+        }
+        public ResponseModel AddRoom(Room room)
+        {
+            bool roomExists = _context.CheckRoom(room.Id);
+            if (roomExists)
+            {
+                return new ResponseModel("Conflict", "The room already exists");
+            }
+            else
+            {
+                _context.AddRoom(room);
+                return new ResponseModel("Created", "The room successfully added.");
             }
         }
+
         public async Task<HttpResponseMessage> UpdateRoomAsync(Room room)
         {
             bool roomExists = await _db.Rooms.AnyAsync(r => r.Id == room.Id);

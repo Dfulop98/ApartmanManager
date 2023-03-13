@@ -16,6 +16,7 @@ namespace DataAccessLayer.Operations
             _db = db;
         }
 
+        public bool CheckRoom(int id) => _db.Rooms.Any(r => r.Id == id);
         public List<Room> GetRooms() => _db.Rooms.ToList();
 
         public Room GetRoom(int id) => _db.Rooms.Where(x => x.Id == id).First();
