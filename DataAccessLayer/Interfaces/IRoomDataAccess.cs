@@ -5,6 +5,7 @@ namespace DataAccessLayer.Interfaces
     public interface IRoomDataAccess
     {
         public bool CheckRoom(int id);
+        public bool CheckRooms();
         public List<Room> GetRooms();
         public Room GetRoom(int id);
         public void AddRoom(Room room);

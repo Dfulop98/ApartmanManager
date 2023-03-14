@@ -13,6 +13,7 @@ namespace ServiceLayer.Models
         public DateTime  TimeStamp{ get; set; }
 
         public object? Model { get; set; }
+        public List<object>? ModelList { get; set; }
         public ResponseModel(string status, string message) 
         {
             Status = status;
@@ -25,6 +26,13 @@ namespace ServiceLayer.Models
             Message = message;
             TimeStamp = DateTime.Now;
             Model = model;
+        }
+        public ResponseModel(string status, string message, List<object> modelList) 
+        {
+            Status = status;
+            Message = message;
+            TimeStamp = DateTime.Now;
+            ModelList = modelList;
         }
     }
 }

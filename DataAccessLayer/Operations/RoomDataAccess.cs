@@ -17,13 +17,14 @@ namespace DataAccessLayer.Operations
         }
 
         public bool CheckRoom(int id) => _db.Rooms.Any(r => r.Id == id);
+        public bool CheckRooms() => _db.Rooms.Any();
         public List<Room> GetRooms() => _db.Rooms.ToList();
 
         public Room GetRoom(int id) => _db.Rooms.Where(x => x.Id == id).First();
         public void AddRoom(Room room)
         {
             _db.Rooms.Add(room);
-            _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
         public void UpdateRoom(Room room)
         {
@@ -31,14 +32,14 @@ namespace DataAccessLayer.Operations
             existingRoom.RoomNumber = room.RoomNumber;
             existingRoom.Description = room.Description;
             existingRoom.IsAvailable = room.IsAvailable;
-            _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
 
         public void RemoveRoom(int id)
         {
             Room existingRoom = _db.Rooms.Where(r => r.Id == id).First();
             _db.Rooms.Remove(existingRoom);
-            _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
 
 

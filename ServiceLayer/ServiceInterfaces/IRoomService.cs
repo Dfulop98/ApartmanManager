@@ -1,14 +1,15 @@
 ﻿using DataModelLayer.Models;
+using ServiceLayer.Models;
 
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IRoomService
     {
-        public List<Room> GetRooms();
-        public Room GetRoom(int id);
-        public Task<HttpResponseMessage> AddRoom(Room room);
-        public Task<HttpResponseMessage> UpdateRoomAsync(Room room);
-        public Task<HttpResponseMessage> RemoveRoomByIdAsync(int id);
+        public ResponseModel GetRooms();
+        public ResponseModel GetRoom(int id);
+        public ResponseModel AddRoom(Room room);
+        public ResponseModel UpdateRoom(Room room);
+        public ResponseModel RemoveRoom(int id);
 
     }
 }
