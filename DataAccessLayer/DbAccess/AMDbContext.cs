@@ -5,7 +5,6 @@ namespace DataAccessLayer.DbAccess
 {
     public class AMDbContext : DbContext
     {
-
         public AMDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -17,5 +16,4 @@ namespace DataAccessLayer.DbAccess
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Payment> Payments { get; set; }
     }
-
 }
