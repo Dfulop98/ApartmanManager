@@ -1,13 +1,16 @@
 ﻿using DataModelLayer.Models;
+using ServiceLayer.Factories;
+using ServiceLayer.Factories.Model;
+
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IReservatonService
     {
-        public Task<IEnumerable<Reservation>> GetReservationsAsync();
-        public Task<Reservation> GetReservationByIdAsync(int id);
-        public Task<HttpResponseMessage> AddReservationAsync(Reservation reservation);
-        public Task<HttpResponseMessage> RemoveReservationAsync(int id);
-        public Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation);
+        public ResponseModel<Reservation> GetReservations();
+        public ResponseModel<Reservation> GetReservation(int id);
+        public ResponseModel<Reservation> AddReservation(Reservation reservation);
+        public ResponseModel<Reservation> RemoveReservation(int id);
+        public ResponseModel<Reservation> UpdateReservation(Reservation reservation);
 
     }
 }
