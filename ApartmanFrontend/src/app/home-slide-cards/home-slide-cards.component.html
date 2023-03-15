@@ -3,10 +3,10 @@
       <div *ngFor="let room of rooms" class="swiper-slide">
         <div class="card">
           <img [src]="'assets/images/' + room.image" [alt]="room.name" />
-          <h3>{{ room.name }}</h3>
-          <p>description</p>
+          <h3>{{ room.roomNumber }}</h3>
+          <p>{{ room.description }}</p>
           <div class="footer">
-            <p class="price">price</p>
+            <p class="price">{{ room.pricePerNight }}</p>
           </div>
         </div>
       </div>

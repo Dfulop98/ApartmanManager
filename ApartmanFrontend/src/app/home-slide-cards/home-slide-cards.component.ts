@@ -1,5 +1,5 @@
 import { Component,Input, OnInit } from '@angular/core';
-import Swiper, { SwiperOptions } from 'swiper';
+import Swiper from 'swiper';
 import { RoomService } from '../services/room.service';
 
 @Component({
@@ -18,7 +18,6 @@ export class HomeSlideCardsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchRooms();
-    this.initSwiper();
   }
 
   fetchRooms(): void {
@@ -27,6 +26,7 @@ export class HomeSlideCardsComponent implements OnInit {
         if (typeof data === 'object' && data !== null && 'models' in data) {
           this.rooms = (data as any).models;
           console.log((data as any).models);
+          this.initSwiper();
         } else {
           console.error('Unexpected data format:', data);
         }
