@@ -1,15 +1,17 @@
 ﻿using DataModelLayer.Models;
+using ServiceLayer.Factories;
+using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IRoomService
     {
-        public Task<IEnumerable<Room>> GetAllRoomAsync();
-        public Task<Room> GetRoomByIdAsync(int id);
-        public Task<Room> GetRoomByRoomNumberAsync(string roomNumber);
-        public Task<HttpResponseMessage> AddRoomAsync(Room room);
-        public Task<HttpResponseMessage> UpdateRoomAsync(Room room);
-        public Task<HttpResponseMessage> RemoveRoomByIdAsync(int id);
+        
+        public ResponseModel<Room> GetRooms();
+        public ResponseModel<Room> GetRoom(int id);
+        public ResponseModel<Room> AddRoom(Room room);
+        public ResponseModel<Room> UpdateRoom(Room room);
+        public ResponseModel<Room> RemoveRoom(int id);
 
     }
 }

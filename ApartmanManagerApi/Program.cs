@@ -1,6 +1,11 @@
 
 using DataAccessLayer.DbAccess;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.Operations;
+using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using ServiceLayer.Factories;
+using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
 
@@ -19,7 +24,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+builder.Services.AddTransient(typeof(IGenericDataAccess<>), typeof(GenericDataAccess<>));
+builder.Services.AddTransient(typeof(IResponseModelFactory<>), typeof(ResponseModelFactory<>));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IRoomDataAccess, RoomDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
 var app = builder.Build();
 

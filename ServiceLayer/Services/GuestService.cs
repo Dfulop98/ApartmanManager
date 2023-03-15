@@ -1,7 +1,10 @@
 ﻿using DataAccessLayer.DbAccess;
+using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Factories;
+using ServiceLayer.Factories.Interfaces;
+using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
 using System.Net;
 
@@ -9,71 +12,72 @@ namespace ServiceLayer.Services
 {
     public class GuestService : IGuestService
     {
-        private readonly AMDbContext _db;
-
-        public GuestService(AMDbContext db)
+        private readonly IGenericDataAccess<Guest> _guestContext;
+        private readonly IResponseModelFactory<Guest> _responseModel;
+        public GuestService(
+            IGenericDataAccess<Guest> guestContext,
+            IResponseModelFactory<Guest> responseModel
+            )
         {
-            _db = db;
+            _guestContext= guestContext;
+            _responseModel = responseModel;
         }
 
-        public async Task<IEnumerable<Guest>> GetAllGuestsAsync() => await _db.Guests.ToListAsync();
-        public async Task<Guest> GetGuestByIdAsync(int id) => await _db.Guests.Where(x => x.Id == id).FirstAsync();
-
-        public async Task<HttpResponseMessage> AddGuestAsync(Guest guest)
+        public ResponseModel<Guest> GetGuests()
         {
-            bool guestExists = await _db.Guests.AnyAsync(r => r.Id == guest.Id);
-            if (guestExists)
+            if (_guestContext.CheckEntities())
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.Conflict, "The guest already exists.");
+                var entities = _guestContext.GetEntities();
+                return _responseModel.CreateResponseModel("Success", "The guest returned.", entities);
             }
-            else
+            return _responseModel.CreateResponseModel("NotFound", "The Guest doesnt exists.");
+
+        }
+        public ResponseModel<Guest> GetGuest(int id)
+        {
+            if (_guestContext.CheckEntity(id))
             {
-                await _db.Guests.AddAsync(guest);
-                await _db.SaveChangesAsync();
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.Created, "The guest successfully added.");
+                var entity = _guestContext.GetEntity(id);
+                return _responseModel.CreateResponseModel("Success", "The guest returned.", entity);
             }
+            return _responseModel.CreateResponseModel("NotFound", "The Guest doesnt exists.");
         }
 
-        public async Task<HttpResponseMessage> UpdateGuestAsync(Guest guest)
+        public ResponseModel<Guest> AddGuest(Guest guest)
         {
-            bool guestExists = await _db.Guests.AnyAsync(g => g.Id == guest.Id);
-            if (!guestExists)
+
+            if (!_guestContext.CheckEntity(guest.Id))
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.NotFound, "Guest doesnt exists.");
+                _guestContext.AddEntity(guest);
+                return _responseModel.CreateResponseModel("Success", "The Guest successfully added.");
             }
-            else
-            {
-                Guest existingGuest = await _db.Guests.Where(g => g.Id == guest.Id).FirstAsync();
-                existingGuest.Address = guest.Address;
-                existingGuest.Name = guest.Name;
-                existingGuest.Phone= guest.Phone;
-                existingGuest.Email = guest.Email;
-                existingGuest.Nationatily = guest.Nationatily;
-                await _db.SaveChangesAsync();
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Guest successfully updated.");
-            }
+            return _responseModel.CreateResponseModel("Conflict", "The Guest already exists.");
+            
         }
 
-        public async Task<HttpResponseMessage> RemoveGuestByIdAsync(int id)
+        public ResponseModel<Guest> UpdateGuest(Guest guest)
         {
-            bool guestExists = await _db.Guests.AnyAsync(g => g.Id == id);
-            if (!guestExists)
+            
+            if (_guestContext.CheckEntity(guest.Id))
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.NotFound, "Guest doesnt exists.");
+                _guestContext.UpdateEntity(guest);
+                return _responseModel.CreateResponseModel("Success", "The Guest successfully updated.");
             }
-            else
+            return _responseModel.CreateResponseModel("NotFound", "The guest doesnt exists.");
+
+        }
+
+        public ResponseModel<Guest> RemoveGuest(int id)
+        {
+            
+            if (_guestContext.CheckEntity(id))
             {
-                Guest existingGuest = await _db.Guests.Where(g => g.Id == id).FirstAsync();
-                _db.Guests.Remove(existingGuest);
-                await _db.SaveChangesAsync();
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Guest successfully deleted.");
+                _guestContext.RemoveEntity(id);
+                return _responseModel.CreateResponseModel("Success", "The Guest successfully removed.");
             }
+            return _responseModel.CreateResponseModel("NotFound", "The guest doesnt exists.");
+
+
         }
     }
 }

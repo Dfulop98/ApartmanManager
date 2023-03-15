@@ -1,7 +1,10 @@
 ﻿using DataAccessLayer.DbAccess;
+using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Factories;
+using ServiceLayer.Factories.Interfaces;
+using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
 using System.Net;
 
@@ -9,92 +12,85 @@ namespace ServiceLayer.Services
 {
     public class ReservationService : IReservatonService
     {
-        private readonly AMDbContext _db;
-        public ReservationService(AMDbContext db)
+        private readonly IGenericDataAccess<Reservation> _reservationContext;
+        private readonly IGenericDataAccess<Room> _roomContext;
+        private readonly IResponseModelFactory<Reservation> _responseModel;
+        public ReservationService(
+            IGenericDataAccess<Reservation> reservationContext
+            , IGenericDataAccess<Room> roomContext
+            , IResponseModelFactory<Reservation> responseModel
+            )
         {
-            _db = db;
+            _reservationContext = reservationContext;
+            _roomContext = roomContext;
+            _responseModel = responseModel;
         }
 
-        public async Task<IEnumerable<Reservation>> GetReservationsAsync() => await _db.Reservations.ToListAsync();
-        public async Task<Reservation> GetReservationByIdAsync(int id) => await _db.Reservations.Where(r => r.Id == id).FirstAsync();
+        public ResponseModel<Reservation> GetReservations()
+        {
+            if (_reservationContext.CheckEntities())
+            {
+                var entities = _reservationContext.GetEntities();
+                return _responseModel.CreateResponseModel("Success","The reservations returned.", entities);
+            }
+            return _responseModel.CreateResponseModel("NotFound", "The reservations doesnt exists.");
+
+        }
+        public ResponseModel<Reservation> GetReservation(int id)
+        {
+            if (_reservationContext.CheckEntity(id))
+            {
+                var entity = _reservationContext.GetEntity(id);
+                return _responseModel.CreateResponseModel("Success", "The reservation returned.", entity);
+            }
+            return _responseModel.CreateResponseModel("NotFound", "The reservation doesnt exists");
+        }
         
 
-        public async Task<HttpResponseMessage> AddReservationAsync(Reservation reservation)
+        public ResponseModel<Reservation> AddReservation(Reservation reservation)
         {
-            bool reservationExists = await _db.Reservations.AnyAsync(r => r.Id == reservation.Id);
-            if (reservationExists)
+            if (_reservationContext.CheckEntity(reservation.Id))
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.Conflict, "The reservation is already exists.");
+                return _responseModel.CreateResponseModel("Conflict", "The reservation already exists.");
             }
             else
             {
-                if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate > DateTime.Now)
+                if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate < DateTime.Now)
                 {
-                    return HttpResponseMessageFactory.CreateHttpResponseMessage
-                        (HttpStatusCode.BadRequest, "The reservation dates incorrect.");
+                    return _responseModel.CreateResponseModel("BadRequest", "The reservation date is incorrect.");
                 }
-                if (await _db.Rooms.AnyAsync(r => r.Id == reservation.RoomId))
+                if (_roomContext.CheckEntity(reservation.RoomId))
                 {
-                    bool isAvailable = await _db.Rooms
-                        .Where(r => r.Id == reservation.RoomId)
-                        .Select(r => r.IsAvailable).FirstOrDefaultAsync();
-                    if (isAvailable)
+                    var relatedRoom = _roomContext.GetEntity(reservation.RoomId);
+                    if (relatedRoom.IsAvailable)
                     {
-                        await _db.Reservations.AddAsync(reservation);
-                        _db.SaveChanges();
-                        return HttpResponseMessageFactory.CreateHttpResponseMessage
-                            (HttpStatusCode.Created, "The reservation succefully added.");
+                        _reservationContext.AddEntity(reservation);
+                        return _responseModel.CreateResponseModel("Success", "Room succefully added.");
                     }
-                    return HttpResponseMessageFactory.CreateHttpResponseMessage
-                        (HttpStatusCode.BadRequest, "This room is not available at the moment.");
+                    return _responseModel.CreateResponseModel("Conflict", "The Room is not available");
                 }
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.BadRequest, "The room doesnt exists.");
+                return _responseModel.CreateResponseModel("BadRequest", "The Room doesnt exists.");
             }
         }
 
-        public async Task<HttpResponseMessage> UpdateReservationAsync(Reservation reservation)
+        public ResponseModel<Reservation> UpdateReservation(Reservation reservation)
         {
-            bool reservationExists = await _db.Reservations.AnyAsync(r => r.Id == reservation.Id);
-            if (!reservationExists)
+            if (_reservationContext.CheckEntity(reservation.Id))
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.NotFound, "Reservation doesnt exists.");
+                _reservationContext.UpdateEntity(reservation);
+                return _responseModel.CreateResponseModel("Succes", "The reservation succefully updated.");
             }
-            else
-            {
-                Reservation existingReservation = await _db.Reservations.Where(r => r.Id == reservation.Id).FirstAsync();
-                existingReservation.Name = reservation.Name;
-                existingReservation.Email = reservation.Email;
-                existingReservation.Phone = reservation.Phone;
-                existingReservation.CheckInDate = reservation.CheckInDate;
-                existingReservation.CheckOutDate = reservation.CheckOutDate;
-                existingReservation.NumberOfGuests = reservation.NumberOfGuests;
-                existingReservation.RoomId = reservation.RoomId;
-                _db.SaveChanges();
-
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Reservation successfully updated.");
-            }
+            return _responseModel.CreateResponseModel("NotFound", "The reservation doesnt exists.");
         }
       
-        public async Task<HttpResponseMessage> RemoveReservationAsync(int id)
+        public ResponseModel<Reservation> RemoveReservation(int id)
         {
-            bool reservationExists = await _db.Reservations.AnyAsync(r => r.Id == id);
-            if (!reservationExists)
+            if (_reservationContext.CheckEntity(id))
             {
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.NotFound, "Reservation doesnt exists.");
+                _reservationContext.RemoveEntity(id);
+                return _responseModel.CreateResponseModel("Succes", "The reservation successfully deleted.");
             }
-            else
-            {
-                Reservation existingReservation = await _db.Reservations.Where(r => r.Id == id).FirstAsync();
-                _db.Reservations.Remove(existingReservation);
-                await _db.SaveChangesAsync();
-                return HttpResponseMessageFactory.CreateHttpResponseMessage
-                    (HttpStatusCode.OK, "Reservation successfully deleted.");
-            }
+            return _responseModel.CreateResponseModel("NotFound", "The reservation doesnt exists.");
         }
 
     }

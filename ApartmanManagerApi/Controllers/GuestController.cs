@@ -13,34 +13,34 @@ namespace ApartmanManagerApi.Controllers
         }
 
         [HttpGet("/api/guests")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetAllGuest()
+        public OkObjectResult GetGuests()
         {
-            IEnumerable<Guest> allGuest = await _guestService.GetAllGuestsAsync();
+            var allGuest =_guestService.GetGuests();
             return Ok(allGuest);
         }
 
         [HttpGet("/api/guest/{id}")]
-        public async Task<ActionResult<Guest>> GetGuestById(int id)
+        public OkObjectResult GetGuest(int id)
         {
-            return Ok(await _guestService.GetGuestByIdAsync(id));
+            return Ok(_guestService.GetGuest(id));
         }
 
         [HttpPost("/api/guest/add")]
-        public async Task<ActionResult> AddGuest([FromBody] Guest guest)
+        public OkObjectResult AddGuest([FromBody] Guest guest)
         {
-            return Ok(await _guestService.AddGuestAsync(guest));
+            return Ok(_guestService.AddGuest(guest));
         }
 
         [HttpPut("/api/guest/update")]
-        public async Task<ActionResult> Updateguest([FromBody] Guest guest)
+        public OkObjectResult Updateguest([FromBody] Guest guest)
         {
-            return Ok(await _guestService.UpdateGuestAsync(guest));
+            return Ok(_guestService.UpdateGuest(guest));
         }
 
         [HttpDelete("/api/guest/remove/{id}")]
-        public async Task<ActionResult> DeleteGuest(int id)
+        public OkObjectResult DeleteGuest(int id)
         {
-            return Ok(await _guestService.RemoveGuestByIdAsync(id));
+            return Ok(_guestService.RemoveGuest(id));
         }
     }
 }
