@@ -55,7 +55,7 @@ namespace ServiceLayer.Services
             }
             else
             {
-                if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate > DateTime.Now)
+                if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate < DateTime.Now)
                 {
                     return _responseModel.CreateResponseModel("BadRequest", "The reservation date is incorrect.");
                 }
