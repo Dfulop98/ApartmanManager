@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ApartmanFrontend';
+  @ViewChild(NavbarComponent) navbarComponent!: NavbarComponent;
+
+  activeIndex: number = 0;
+
+  onActiveIndexChanged(index: number): void {
+    this.activeIndex = index;
+  }
 }

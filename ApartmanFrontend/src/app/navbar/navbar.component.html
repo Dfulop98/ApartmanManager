@@ -1,34 +1,10 @@
 <div class="navbar">
     <div class="nav-menu">
-        <div class="link home">
-            <div class="nav-button">
-                <img class="button-img" src="../../assets/nav_icons/home.png" alt="home-icon">
-                <p class="button-title">Home</p>
-            </div>
+      <div *ngFor="let navItem of navItems; let i = index" class="link" [class.active]="i === activeIndex" (click)="setActiveIndex(i)">
+        <div class="nav-button">
+          <img class="button-img" [src]="'../../assets/nav_icons/' + navItem.icon" [alt]="navItem.title + '-icon'">
+          <p class="button-title">{{ navItem.title }}</p>
         </div>
-        <div class="link gallery">
-            <div class="nav-button">
-                <img class="button-img" src="../../assets/nav_icons/gallery2.png" alt="gallery-icon">
-                <p class="button-title">Gallery</p>
-            </div>
-        </div>
-        <div class="link calendar">
-            <div class="nav-button">
-                <img class="button-img" src="../../assets/nav_icons/book.png" alt="book-icon">
-                <p class="button-title">Book</p>
-            </div>
-        </div>
-        <div class="link contact">
-            <div class="nav-button">
-                <img class="button-img" src="../../assets/nav_icons/contact.png" alt="contact-icon">
-                <p class="button-title">Contact</p>
-            </div>
-        </div>
-        <div class="link support">
-            <div class="nav-button">
-                <img class="button-img" src="../../assets/nav_icons/support.png" alt="support-icon">
-                <p class="button-title">Support</p>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
+  </div>

@@ -5,16 +5,20 @@ import { AppComponent } from './app.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomService } from './rooms/rooms.service';
 import { NavbarComponent } from './navbar/navbar.component';
-
+import { HomeSlideCardsComponent } from './home-slide-cards/home-slide-cards.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
     RoomsComponent,
-    NavbarComponent
+    NavbarComponent,
+    HomeSlideCardsComponent
+    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     RoomService
