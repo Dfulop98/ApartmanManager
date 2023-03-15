@@ -1,0 +1,16 @@
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div *ngFor="let room of rooms" class="swiper-slide">
+        <div class="card">
+          <img [src]="'assets/images/' + room.image" [alt]="room.name" />
+          <h3>{{ room.name }}</h3>
+          <p>description</p>
+          <div class="footer">
+            <p class="price">price</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="swiper-pagination"></div>
+  </div>

@@ -1,0 +1,46 @@
+@import '~swiper/swiper-bundle.min.css';
+
+.swiper-container {
+    position: absolute;
+    border: 1px solid red;
+    height: 45vh;
+    width: 94.5%;
+    overflow: hidden;
+  }
+.swiper-wrapper{
+    width: 70%;
+}
+.card {
+    background-color: #393e46;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    padding: 20px;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+    min-height: 80%;
+    margin-top: 1rem;
+  }
+
+  
+  .card img {
+    border-radius: 10px 10px 0 0;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+  }
+  
+  .card h3 {
+    color: hsl(28, 100%, 35%);
+    font-size: 20px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  
+  
+  
