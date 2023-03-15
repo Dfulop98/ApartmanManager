@@ -17,7 +17,16 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 builder.Services.AddSingleton(builder.Configuration);
 builder.Services.AddDbContext<AMDbContext>(options =>
     options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200") // Angular alkalmazásod URL-je
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("MyCorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
