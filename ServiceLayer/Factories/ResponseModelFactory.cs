@@ -29,7 +29,7 @@ namespace ServiceLayer.Factories
                 Model = model
             };
         }
-        public ResponseModel<T> CreateResponseModel(string status, string message, List<T> models)
+        public ResponseModel<T> CreateResponseModel(string status, string message, IEnumerable<T> models)
         {
             return new ResponseModel<T>
             {

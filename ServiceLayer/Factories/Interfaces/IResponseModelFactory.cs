@@ -11,6 +11,6 @@ namespace ServiceLayer.Factories.Interfaces
     {
         ResponseModel<T> CreateResponseModel(string status, string message);
         ResponseModel<T> CreateResponseModel(string status, string message, T model);
-        ResponseModel<T> CreateResponseModel(string status, string message, List<T> models);
+        ResponseModel<T> CreateResponseModel(string status, string message, IEnumerable<T> models);
     }
 }

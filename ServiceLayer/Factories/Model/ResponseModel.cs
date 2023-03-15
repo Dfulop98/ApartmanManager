@@ -12,7 +12,7 @@ namespace ServiceLayer.Factories.Model
         public string Message { get; set; }
         public DateTime TimeStamp { get; set; }
         public T? Model { get; set; }
-        public List<T>? Models { get; set; }
+        public IEnumerable<T>? Models { get; set; }
 
     }
 }
