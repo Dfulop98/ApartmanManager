@@ -1,15 +1,11 @@
 ﻿using DataAccessLayer.DbAccess;
 using DataAccessLayer.Interfaces;
+using DataModelLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Operations
 {
-    public class GenericDataAccess<T> : IGenericDataAccess<T> where T : class , IEntity
+    public class GenericDataAccess<T> : IGenericDataAccess<T> where T : class, IEntity
     {
         private readonly AMDbContext _db;
 
@@ -55,6 +51,6 @@ namespace DataAccessLayer.Operations
             }
         }
 
-        
+
     }
 }

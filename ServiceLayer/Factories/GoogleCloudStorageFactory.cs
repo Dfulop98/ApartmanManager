@@ -1,8 +1,4 @@
-﻿using DataAccessLayer.Interfaces;
-using DataModelLayer.Models;
-using Google.Cloud.Storage.V1;
-using ServiceLayer.ServiceInterfaces;
-using System.IO;
+﻿using Google.Cloud.Storage.V1;
 
 namespace ServiceLayer.Factories
 {

@@ -1,7 +1,6 @@
 ﻿using DataModelLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.ServiceInterfaces;
-using ServiceLayer.Services;
 
 namespace ApartmanManagerApi.Controllers
 {

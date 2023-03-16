@@ -12,7 +12,7 @@ namespace DataAccessLayer.Interfaces
         public void UpdateRoom(Room room);
         public void RemoveRoom(int id);
         public void AddImage(RoomImage image);
-        public void AddImageToRoom(Room room ,RoomImage image);
+        public void AddImageToRoom(Room room, RoomImage image);
 
     }
 }
