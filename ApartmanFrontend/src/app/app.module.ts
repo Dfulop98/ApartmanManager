@@ -7,12 +7,14 @@ import { RoomService } from './rooms/rooms.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeSlideCardsComponent } from './home-slide-cards/home-slide-cards.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 @NgModule({
   declarations: [
     AppComponent,
     RoomsComponent,
     NavbarComponent,
-    HomeSlideCardsComponent
+    HomeSlideCardsComponent,
+    UploadImageComponent
     
   ],
   imports: [
