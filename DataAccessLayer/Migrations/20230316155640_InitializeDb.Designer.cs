@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AMDbContext))]
-    [Migration("20230220190748_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230316155640_InitializeDb")]
+    partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace DataAccessLayer.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccessLayer.Models.Guest", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Guest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +60,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Guests");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Payment", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,7 +84,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Reservation", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Reservation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,7 +113,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -123,7 +123,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Room", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Room", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,9 +155,31 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Payment", b =>
+            modelBuilder.Entity("DataModelLayer.Models.RoomImage", b =>
                 {
-                    b.HasOne("DataAccessLayer.Models.Reservation", "Reservation")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("RoomImages");
+                });
+
+            modelBuilder.Entity("DataModelLayer.Models.Payment", b =>
+                {
+                    b.HasOne("DataModelLayer.Models.Reservation", "Reservation")
                         .WithMany()
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,15 +188,26 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Reservation");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Reservation", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Reservation", b =>
                 {
-                    b.HasOne("DataAccessLayer.Models.Room", null)
+                    b.HasOne("DataModelLayer.Models.Room", null)
                         .WithMany("Reservations")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataModelLayer.Models.RoomImage", b =>
+                {
+                    b.HasOne("DataModelLayer.Models.Room", null)
+                        .WithMany("Images")
                         .HasForeignKey("RoomId");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Room", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Room", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618

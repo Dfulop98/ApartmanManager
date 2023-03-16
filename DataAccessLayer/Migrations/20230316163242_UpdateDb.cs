@@ -4,17 +4,17 @@
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class UpdateDatabaseModels : Migration
+    public partial class UpdateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Reservations_Rooms_RoomId",
-                table: "Reservations");
+                name: "FK_RoomImages_Rooms_RoomId",
+                table: "RoomImages");
 
             migrationBuilder.AlterColumn<int>(
                 name: "RoomId",
-                table: "Reservations",
+                table: "RoomImages",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0,
@@ -23,8 +23,8 @@ namespace DataAccessLayer.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Reservations_Rooms_RoomId",
-                table: "Reservations",
+                name: "FK_RoomImages_Rooms_RoomId",
+                table: "RoomImages",
                 column: "RoomId",
                 principalTable: "Rooms",
                 principalColumn: "Id",
@@ -34,20 +34,20 @@ namespace DataAccessLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Reservations_Rooms_RoomId",
-                table: "Reservations");
+                name: "FK_RoomImages_Rooms_RoomId",
+                table: "RoomImages");
 
             migrationBuilder.AlterColumn<int>(
                 name: "RoomId",
-                table: "Reservations",
+                table: "RoomImages",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "integer");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Reservations_Rooms_RoomId",
-                table: "Reservations",
+                name: "FK_RoomImages_Rooms_RoomId",
+                table: "RoomImages",
                 column: "RoomId",
                 principalTable: "Rooms",
                 principalColumn: "Id");
