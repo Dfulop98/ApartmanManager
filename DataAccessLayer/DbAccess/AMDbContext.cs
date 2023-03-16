@@ -1,5 +1,6 @@
 ﻿using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DataAccessLayer.DbAccess
 {
@@ -15,5 +16,6 @@ namespace DataAccessLayer.DbAccess
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<RoomImage> RoomImages { get; set; }
     }
 }

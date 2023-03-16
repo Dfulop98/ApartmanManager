@@ -1,6 +1,7 @@
 ﻿using DataModelLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.ServiceInterfaces;
+using ServiceLayer.Services;
 
 namespace ApartmanManagerApi.Controllers
 {
@@ -42,6 +43,18 @@ namespace ApartmanManagerApi.Controllers
         public OkObjectResult DeleteRoom(int id)
         {
             return Ok(_roomService.RemoveRoom(id));
+        }
+
+        [HttpPost("/api/room/upload-image")]
+        public IActionResult UploadImage(IFormFile image, int id)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("The pic doesnt exists.");
+            }
+            using var imageStream = image.OpenReadStream();
+
+            return Ok(_roomService.AddImage(imageStream, image.FileName, id));
         }
 
 

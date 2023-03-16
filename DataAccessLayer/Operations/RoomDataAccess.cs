@@ -18,7 +18,7 @@ namespace DataAccessLayer.Operations
 
         public bool CheckRoom(int id) => _db.Rooms.Any(r => r.Id == id);
         public bool CheckRooms() => _db.Rooms.Any();
-        public List<Room> GetRooms() => _db.Rooms.ToList();
+        public List<Room> GetRooms() => _db.Rooms.Include(r => r.Images).ToList();
 
         public Room GetRoom(int id) => _db.Rooms.Where(x => x.Id == id).First();
         public void AddRoom(Room room)
@@ -42,6 +42,17 @@ namespace DataAccessLayer.Operations
             _db.SaveChanges();
         }
 
+        public void AddImage(RoomImage image)
+        {
+            _db.RoomImages.Add(image);
+            _db.SaveChanges();
 
+        }
+        public void AddImageToRoom(Room room,RoomImage image)
+        {
+            room.Images.Add(image);
+            _db.SaveChanges();
+
+        }
     }
 }

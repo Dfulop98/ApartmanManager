@@ -12,6 +12,7 @@ namespace ServiceLayer.ServiceInterfaces
         public ResponseModel<Room> AddRoom(Room room);
         public ResponseModel<Room> UpdateRoom(Room room);
         public ResponseModel<Room> RemoveRoom(int id);
+        public ResponseModel<Room> AddImage(Stream imageStream, string imageName, int roomId);
 
     }
 }

@@ -24,6 +24,9 @@ namespace DataModelLayer.Models
         [Required]
         [MaxLength(500)]
         public string Description { get; set; }
-        public ICollection<Reservation>? Reservations { get; set; }
+        
+        public List<Reservation> Reservations { get; set; }
+
+        public List<RoomImage> Images { get; set; }
     }
 }
