@@ -1,16 +1,12 @@
-﻿using ServiceLayer.Factories.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DTOLayer.Models;
+using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.Factories.Interfaces
 {
-    public interface IResponseModelFactory<T>
+    public interface IResponseModelFactory
     {
-        ResponseModel<T> CreateResponseModel(string status, string message);
-        ResponseModel<T> CreateResponseModel(string status, string message, T model);
-        ResponseModel<T> CreateResponseModel(string status, string message, IEnumerable<T> models);
+        ResponseModel CreateResponseModel(string status, string message);
+        ResponseModel CreateResponseModel(string status, string message, UniversalDTO model);
+        ResponseModel CreateResponseModel(string status, string message, IEnumerable<UniversalDTO> models);
     }
 }

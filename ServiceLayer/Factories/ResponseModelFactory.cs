@@ -1,27 +1,23 @@
-﻿using ServiceLayer.Factories.Interfaces;
+﻿using DTOLayer.Models;
+using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.Factories.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Factories
 {
-    public class ResponseModelFactory<T> : IResponseModelFactory<T>
+    public class ResponseModelFactory : IResponseModelFactory
     {
-        public ResponseModel<T> CreateResponseModel(string status, string message)
+        public ResponseModel CreateResponseModel(string status, string message)
         {
-            return new ResponseModel<T>
+            return new ResponseModel
             {
                 Status = status,
                 Message = message,
                 TimeStamp = DateTime.Now,
             };
         }
-        public ResponseModel<T> CreateResponseModel(string status, string message, T model)
+        public ResponseModel CreateResponseModel(string status, string message, UniversalDTO model)
         {
-            return new ResponseModel<T>
+            return new ResponseModel
             {
                 Status = status,
                 Message = message,
@@ -29,9 +25,9 @@ namespace ServiceLayer.Factories
                 Model = model
             };
         }
-        public ResponseModel<T> CreateResponseModel(string status, string message, IEnumerable<T> models)
+        public ResponseModel CreateResponseModel(string status, string message, IEnumerable<UniversalDTO> models)
         {
-            return new ResponseModel<T>
+            return new ResponseModel
             {
                 Status = status,
                 Message = message,
