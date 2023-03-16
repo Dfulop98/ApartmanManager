@@ -1,13 +1,10 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
+using DTOLayer.Models;
 using Moq;
-using NUnit.Framework;
-using ServiceLayer.Factories;
 using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
-using System;
-using System.Collections.Generic;
 
 namespace ServiceLayer.Tests
 {
@@ -16,7 +13,7 @@ namespace ServiceLayer.Tests
     {
         private Mock<IGenericDataAccess<Reservation>> _mockReservationContext;
         private Mock<IGenericDataAccess<Room>> _mockRoomContext;
-        private Mock<IResponseModelFactory<Reservation>> _mockResponseModel;
+        private Mock<IResponseModelFactory> _mockResponseModel;
         private IReservatonService _reservationService;
 
         [SetUp]
@@ -24,7 +21,7 @@ namespace ServiceLayer.Tests
         {
             _mockReservationContext = new Mock<IGenericDataAccess<Reservation>>();
             _mockRoomContext = new Mock<IGenericDataAccess<Room>>();
-            _mockResponseModel = new Mock<IResponseModelFactory<Reservation>>();
+            _mockResponseModel = new Mock<IResponseModelFactory>();
             _reservationService = new ReservationService(_mockReservationContext.Object, _mockRoomContext.Object, _mockResponseModel.Object);
         }
 
@@ -40,7 +37,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.GetReservations();
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservations returned.", It.IsAny<IEnumerable<Reservation>>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservations returned.", It.IsAny<IEnumerable<UniversalDTO>>()), Times.Once);
         }
 
         [Test]
@@ -68,7 +65,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.GetReservation(id);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservation returned.", It.IsAny<Reservation>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservation returned.", It.IsAny<UniversalDTO>()), Times.Once);
         }
 
         [Test]
