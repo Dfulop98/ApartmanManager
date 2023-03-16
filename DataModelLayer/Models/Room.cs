@@ -1,10 +1,11 @@
 ﻿
+using DataModelLayer.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 
 namespace DataModelLayer.Models
 {
-    public class Room
+    public class Room : IEntity
     {
         [Key]
         public int Id { get; set; }
@@ -24,7 +25,7 @@ namespace DataModelLayer.Models
         [Required]
         [MaxLength(500)]
         public string Description { get; set; }
-        
+
         public List<Reservation> Reservations { get; set; }
 
         public List<RoomImage> Images { get; set; }
