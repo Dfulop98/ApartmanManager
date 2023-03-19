@@ -16,7 +16,14 @@ namespace DataAccessLayer.Operations
 
         public bool CheckEntity(int id) => _db.Set<T>().Any(e => e.Id == id);
         public bool CheckEntities() => _db.Set<T>().Any();
-        public List<T> GetEntities() => _db.Set<T>().ToList();
+        public List<T> GetEntities(string navigationPoperty = null) 
+        {
+            if (string.IsNullOrEmpty(navigationPoperty))
+            {
+                return _db.Set<T>().ToList();
+            }
+            return _db.Set<T>().Include(navigationPoperty).ToList();
+        } 
 
         public T GetEntity(int id) => _db.Set<T>().Where(e => e.Id == id).First();
         public void AddEntity(T entity)

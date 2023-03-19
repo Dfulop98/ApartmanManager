@@ -4,7 +4,7 @@
     {
         bool CheckEntity(int id);
         bool CheckEntities();
-        List<T> GetEntities();
+        List<T> GetEntities(string navigationProperty = null);
         T GetEntity(int id);
         void AddEntity(T entity);
         void UpdateEntity(T entity);
