@@ -8,19 +8,21 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HomeSlideCardsComponent } from './home-slide-cards/home-slide-cards.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UploadImageComponent } from './upload-image/upload-image.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent,
     RoomsComponent,
     NavbarComponent,
     HomeSlideCardsComponent,
-    UploadImageComponent
+    UploadImageComponent,
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [
     RoomService

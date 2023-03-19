@@ -1,6 +1,7 @@
 import { Component,Input, OnInit } from '@angular/core';
 import Swiper from 'swiper';
 import { RoomService } from '../services/room.service';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home-slide-cards',
@@ -9,6 +10,7 @@ import { RoomService } from '../services/room.service';
 })
 
 export class HomeSlideCardsComponent implements OnInit {
+  faUser = faUser;
   @Input() activeIndex?: number;
   swiper?: Swiper;
 

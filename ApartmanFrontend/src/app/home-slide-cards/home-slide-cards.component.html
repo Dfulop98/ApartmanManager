@@ -9,10 +9,14 @@
             </div>
             <div class="card-body">
               <p>{{ room.properties.Description }}</p>
-              <p>{{ room.properties.Capacity }}</p>
+              <p>
+                {{ room.properties.Capacity }}
+                <fa-icon [icon]="faUser"></fa-icon>
+              </p>
+
             </div>
             <div class="footer">
-              <p class="price">{{ room.properties.PricePerNight }} euro/ person</p>
+              <p class="price">{{ room.properties.PricePerNight }} euro/<fa-icon [icon]="faUser"></fa-icon></p>
             </div>
           </div>
       </div>
