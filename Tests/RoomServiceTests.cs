@@ -1,26 +1,26 @@
-using Moq;
-using NUnit.Framework;
-using ServiceLayer.Factories;
-using ServiceLayer.Factories.Interfaces;
-using ServiceLayer.Services;
 using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
-using System.Collections.Generic;
+using DTOLayer.Models;
+using Moq;
+using ServiceLayer.Factories.Interfaces;
+using ServiceLayer.Services;
 
 namespace ServiceLayer.Tests
 {
     public class RoomServiceTests
     {
         private Mock<IRoomDataAccess> _mockRoomDataAccess;
-        private Mock<IResponseModelFactory<Room>> _mockResponseModel;
+        private Mock<IResponseModelFactory> _mockResponseModel;
+        private Mock<IGenericDataAccess<Room>> _mockRoomContext;
         private RoomService _roomService;
 
         [SetUp]
         public void Setup()
         {
             _mockRoomDataAccess = new Mock<IRoomDataAccess>();
-            _mockResponseModel = new Mock<IResponseModelFactory<Room>>();
-            _roomService = new RoomService(_mockRoomDataAccess.Object, _mockResponseModel.Object);
+            _mockResponseModel = new Mock<IResponseModelFactory>();
+            _mockRoomContext = new Mock<IGenericDataAccess<Room>>();
+            _roomService = new RoomService(_mockRoomContext.Object, _mockResponseModel.Object, _mockRoomDataAccess.Object);
         }
 
         // GetRooms tests
@@ -28,27 +28,27 @@ namespace ServiceLayer.Tests
         public void GetRooms_RoomsExist_ReturnsSuccess()
         {
             // Arrange
-            _mockRoomDataAccess.Setup(x => x.CheckRooms()).Returns(true);
-            _mockRoomDataAccess.Setup(x => x.GetRooms()).Returns(new List<Room> { new Room() });
+            _mockRoomContext.Setup(x => x.CheckEntities()).Returns(true);
+            _mockRoomContext.Setup(x => x.GetEntities(It.IsAny<string>())).Returns(new List<Room>());
 
             // Act
             var result = _roomService.GetRooms();
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The rooms successfully returned.", It.IsAny<List<Room>>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The rooms successfully returned.", It.IsAny<List<UniversalDTO>>()), Times.Once);
         }
 
         [Test]
         public void GetRooms_RoomsDoNotExist_ReturnsNotFound()
         {
             // Arrange
-            _mockRoomDataAccess.Setup(x => x.CheckRooms()).Returns(false);
+            _mockRoomContext.Setup(x => x.CheckEntities()).Returns(false);
 
             // Act
             var result = _roomService.GetRooms();
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "Rooms is doesnt exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The room is doesnt exists."), Times.Once);
         }
 
         // GetRoom tests
@@ -57,14 +57,14 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             int roomId = 1;
-            _mockRoomDataAccess.Setup(x => x.CheckRoom(roomId)).Returns(true);
-            _mockRoomDataAccess.Setup(x => x.GetRoom(roomId)).Returns(new Room { Id = roomId });
+            _mockRoomContext.Setup(x => x.CheckEntity(roomId)).Returns(true);
+            _mockRoomContext.Setup(x => x.GetEntity(roomId)).Returns(new Room { Id = roomId });
 
             // Act
             var result = _roomService.GetRoom(roomId);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The room successfully returned.", It.IsAny<Room>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The room successfully returned.", It.IsAny<UniversalDTO>()), Times.Once);
         }
 
         [Test]
@@ -87,13 +87,13 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             Room room = new Room { Id = 1 };
-            _mockRoomDataAccess.Setup(x => x.CheckRoom(room.Id)).Returns(true);
+            _mockRoomContext.Setup(x => x.CheckEntity(room.Id)).Returns(true);
 
             // Act
             var result = _roomService.AddRoom(room);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The room already exists"), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The room already exists."), Times.Once);
         }
 
         [Test]
@@ -116,13 +116,13 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             Room room = new Room { Id = 1 };
-            _mockRoomDataAccess.Setup(x => x.CheckRoom(room.Id)).Returns(true);
+            _mockRoomContext.Setup(x => x.CheckEntity(room.Id)).Returns(true);
 
             // Act
             var result = _roomService.UpdateRoom(room);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Updated", "The room successfully updated."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The room successfully updated."), Times.Once);
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace ServiceLayer.Tests
             var result = _roomService.UpdateRoom(room);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The room doesnt exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The room is doesnt exists."), Times.Once);
         }
 
         // RemoveRoom tests
@@ -145,13 +145,13 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             int roomId = 1;
-            _mockRoomDataAccess.Setup(x => x.CheckRoom(roomId)).Returns(true);
+            _mockRoomContext.Setup(x => x.CheckEntity(roomId)).Returns(true);
 
             // Act
             var result = _roomService.RemoveRoom(roomId);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("OK", "Room successfully deleted."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "Room successfully deleted."), Times.Once);
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             int roomId = 1;
-            _mockRoomDataAccess.Setup(x => x.CheckRoom(roomId)).Returns(false);
+            _mockRoomContext.Setup(x => x.CheckEntity(roomId)).Returns(false);
 
             // Act
             var result = _roomService.RemoveRoom(roomId);

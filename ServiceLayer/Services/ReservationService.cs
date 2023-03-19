@@ -29,7 +29,10 @@ namespace ServiceLayer.Services
             if (_reservationContext.CheckEntities())
             {
                 var entities = _reservationContext.GetEntities();
-                var entityDTOs = UniversalDtoFactory.CreateListFromObjects(entities, new List<string> { });
+                var entityDTOs = UniversalDtoFactory.CreateListFromObjects(
+                    entities,
+                    new List<string> { "Id", "CheckInDate", "CheckOutDate", "RoomId" }
+                    );
                 return _responseModel.CreateResponseModel(Status.Ok, Messages.ReservationsGetOk, entityDTOs);
             }
             return _responseModel.CreateResponseModel(Status.NotFound, Messages.ReservationNotFound);
@@ -51,7 +54,7 @@ namespace ServiceLayer.Services
         {
             if (_reservationContext.CheckEntity(reservation.Id))
             {
-                return _responseModel.CreateResponseModel(Status.Conflict, Messages.ReservationRoomConflict);
+                return _responseModel.CreateResponseModel(Status.Conflict, Messages.ReservationConflict);
             }
             else
             {

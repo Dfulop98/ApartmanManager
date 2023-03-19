@@ -1,12 +1,10 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
+using DTOLayer.Models;
 using Moq;
-using NUnit.Framework;
-using ServiceLayer.Factories;
 using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
-using System.Collections.Generic;
 
 namespace ServiceLayer.Tests
 {
@@ -14,14 +12,14 @@ namespace ServiceLayer.Tests
     public class GuestServiceTests
     {
         private Mock<IGenericDataAccess<Guest>> _mockGuestContext;
-        private Mock<IResponseModelFactory<Guest>> _mockResponseModel;
+        private Mock<IResponseModelFactory> _mockResponseModel;
         private IGuestService _guestService;
 
         [SetUp]
         public void Setup()
         {
             _mockGuestContext = new Mock<IGenericDataAccess<Guest>>();
-            _mockResponseModel = new Mock<IResponseModelFactory<Guest>>();
+            _mockResponseModel = new Mock<IResponseModelFactory>();
             _guestService = new GuestService(_mockGuestContext.Object, _mockResponseModel.Object);
         }
 
@@ -37,7 +35,7 @@ namespace ServiceLayer.Tests
             var result = _guestService.GetGuest(id);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The guest returned.", It.IsAny<Guest>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The guest returned.", It.IsAny<UniversalDTO>()), Times.Once);
         }
 
         [Test]
@@ -66,7 +64,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockGuestContext.Verify(x => x.AddEntity(guest), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The Guest successfully added."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Created", "The Guest successfully added."), Times.Once);
         }
 
         [Test]
@@ -80,7 +78,7 @@ namespace ServiceLayer.Tests
             var result = _guestService.AddGuest(guest);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The Guest already exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The Guest already exists."), Times.Once);
         }
 
         [Test]
@@ -95,7 +93,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockGuestContext.Verify(x => x.UpdateEntity(guest), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The Guest successfully updated."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The Guest successfully updated."), Times.Once);
         }
 
         [Test]
@@ -124,7 +122,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockGuestContext.Verify(x => x.RemoveEntity(id), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The Guest successfully removed."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The Guest successfully removed."), Times.Once);
         }
 
         [Test]
