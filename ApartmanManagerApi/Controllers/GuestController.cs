@@ -15,7 +15,7 @@ namespace ApartmanManagerApi.Controllers
         [HttpGet("/api/guests")]
         public OkObjectResult GetGuests()
         {
-            var allGuest =_guestService.GetGuests();
+            var allGuest = _guestService.GetGuests();
             return Ok(allGuest);
         }
 

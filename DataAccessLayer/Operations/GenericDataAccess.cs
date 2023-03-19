@@ -1,15 +1,11 @@
 ﻿using DataAccessLayer.DbAccess;
 using DataAccessLayer.Interfaces;
+using DataModelLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Operations
 {
-    public class GenericDataAccess<T> : IGenericDataAccess<T> where T : class , IEntity
+    public class GenericDataAccess<T> : IGenericDataAccess<T> where T : class, IEntity
     {
         private readonly AMDbContext _db;
 
@@ -20,7 +16,14 @@ namespace DataAccessLayer.Operations
 
         public bool CheckEntity(int id) => _db.Set<T>().Any(e => e.Id == id);
         public bool CheckEntities() => _db.Set<T>().Any();
-        public List<T> GetEntities() => _db.Set<T>().ToList();
+        public List<T> GetEntities(string navigationPoperty = null) 
+        {
+            if (string.IsNullOrEmpty(navigationPoperty))
+            {
+                return _db.Set<T>().ToList();
+            }
+            return _db.Set<T>().Include(navigationPoperty).ToList();
+        } 
 
         public T GetEntity(int id) => _db.Set<T>().Where(e => e.Id == id).First();
         public void AddEntity(T entity)
@@ -55,6 +58,6 @@ namespace DataAccessLayer.Operations
             }
         }
 
-        
+
     }
 }

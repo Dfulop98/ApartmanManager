@@ -1,13 +1,10 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
+using DTOLayer.Models;
 using Moq;
-using NUnit.Framework;
-using ServiceLayer.Factories;
 using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
-using System;
-using System.Collections.Generic;
 
 namespace ServiceLayer.Tests
 {
@@ -16,7 +13,7 @@ namespace ServiceLayer.Tests
     {
         private Mock<IGenericDataAccess<Reservation>> _mockReservationContext;
         private Mock<IGenericDataAccess<Room>> _mockRoomContext;
-        private Mock<IResponseModelFactory<Reservation>> _mockResponseModel;
+        private Mock<IResponseModelFactory> _mockResponseModel;
         private IReservatonService _reservationService;
 
         [SetUp]
@@ -24,7 +21,7 @@ namespace ServiceLayer.Tests
         {
             _mockReservationContext = new Mock<IGenericDataAccess<Reservation>>();
             _mockRoomContext = new Mock<IGenericDataAccess<Room>>();
-            _mockResponseModel = new Mock<IResponseModelFactory<Reservation>>();
+            _mockResponseModel = new Mock<IResponseModelFactory>();
             _reservationService = new ReservationService(_mockReservationContext.Object, _mockRoomContext.Object, _mockResponseModel.Object);
         }
 
@@ -34,13 +31,13 @@ namespace ServiceLayer.Tests
         {
             // Arrange
             _mockReservationContext.Setup(x => x.CheckEntities()).Returns(true);
-            _mockReservationContext.Setup(x => x.GetEntities()).Returns(new List<Reservation>());
+            _mockReservationContext.Setup(x => x.GetEntities(It.IsAny<string>())).Returns(new List<Reservation>());
 
             // Act
             var result = _reservationService.GetReservations();
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservations returned.", It.IsAny<IEnumerable<Reservation>>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The Reservations successfully returned.", It.IsAny<IEnumerable<UniversalDTO>>()), Times.Once);
         }
 
         [Test]
@@ -53,7 +50,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.GetReservations();
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The reservations doesnt exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The Reservation is doesnt exists."), Times.Once);
         }
 
         [Test]
@@ -68,7 +65,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.GetReservation(id);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "The reservation returned.", It.IsAny<Reservation>()), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The Reservation successfully returned.", It.IsAny<UniversalDTO>()), Times.Once);
         }
 
         [Test]
@@ -82,7 +79,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.GetReservation(id);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The reservation doesnt exists"), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The Reservation is doesnt exists."), Times.Once);
         }
 
         [Test]
@@ -100,7 +97,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockReservationContext.Verify(x => x.AddEntity(reservation), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Success", "Room succefully added."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Created", "The Reservation successfully added."), Times.Once);
         }
 
         [Test]
@@ -114,7 +111,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.AddReservation(reservation);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The reservation already exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The Reservation already exists."), Times.Once);
         }
 
         [Test]
@@ -128,7 +125,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.AddReservation(reservation);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("BadRequest", "The reservation date is incorrect."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("BadRequest", "The Reservation date is incorrect."), Times.Once);
         }
         [Test]
         public void AddReservation_RoomDoesNotExist_ReturnsBadRequest()
@@ -159,7 +156,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.AddReservation(reservation);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The Room is not available"), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Conflict", "The Room is not available."), Times.Once);
         }
 
         [Test]
@@ -174,7 +171,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockReservationContext.Verify(x => x.UpdateEntity(reservation), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Succes", "The reservation succefully updated."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "The Reservation successfully updated."), Times.Once);
         }
 
         [Test]
@@ -188,7 +185,7 @@ namespace ServiceLayer.Tests
             var result = _reservationService.UpdateReservation(reservation);
 
             // Assert
-            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The reservation doesnt exists."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("NotFound", "The Reservation is doesnt exists."), Times.Once);
         }
 
         [Test]
@@ -203,7 +200,7 @@ namespace ServiceLayer.Tests
 
             // Assert
             _mockReservationContext.Verify(x => x.RemoveEntity(id), Times.Once);
-            _mockResponseModel.Verify(x => x.CreateResponseModel("Succes", "The reservation successfully deleted."), Times.Once);
+            _mockResponseModel.Verify(x => x.CreateResponseModel("Ok", "Reservation successfully deleted."), Times.Once);
         }
     }
 }

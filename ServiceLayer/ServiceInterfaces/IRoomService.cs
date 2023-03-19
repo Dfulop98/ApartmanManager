@@ -1,18 +1,17 @@
 ﻿using DataModelLayer.Models;
-using ServiceLayer.Factories;
 using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IRoomService
     {
-        
-        public ResponseModel<Room> GetRooms();
-        public ResponseModel<Room> GetRoom(int id);
-        public ResponseModel<Room> AddRoom(Room room);
-        public ResponseModel<Room> UpdateRoom(Room room);
-        public ResponseModel<Room> RemoveRoom(int id);
-        public ResponseModel<Room> AddImage(Stream imageStream, string imageName, int roomId);
+
+        public ResponseModel GetRooms();
+        public ResponseModel GetRoom(int id);
+        public ResponseModel AddRoom(Room room);
+        public ResponseModel UpdateRoom(Room room);
+        public ResponseModel RemoveRoom(int id);
+        public ResponseModel AddImage(Stream imageStream, string imageName, int roomId);
 
     }
 }

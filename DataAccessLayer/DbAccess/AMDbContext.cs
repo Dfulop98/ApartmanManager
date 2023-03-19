@@ -1,6 +1,5 @@
 ﻿using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DataAccessLayer.DbAccess
 {

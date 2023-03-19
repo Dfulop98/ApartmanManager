@@ -1,81 +1,82 @@
-﻿using DataAccessLayer.DbAccess;
-using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
-using Microsoft.EntityFrameworkCore;
-using ServiceLayer.Factories;
+using DTOLayer.Factories;
+using DTOLayer.Models;
+using ServiceLayer.Common;
 using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
-using System.Net;
 
 namespace ServiceLayer.Services
 {
     public class GuestService : IGuestService
     {
         private readonly IGenericDataAccess<Guest> _guestContext;
-        private readonly IResponseModelFactory<Guest> _responseModel;
+        private readonly IResponseModelFactory _responseModel;
         public GuestService(
             IGenericDataAccess<Guest> guestContext,
-            IResponseModelFactory<Guest> responseModel
+            IResponseModelFactory responseModel
             )
         {
-            _guestContext= guestContext;
+            _guestContext = guestContext;
             _responseModel = responseModel;
         }
 
-        public ResponseModel<Guest> GetGuests()
+        public ResponseModel GetGuests()
         {
             if (_guestContext.CheckEntities())
             {
                 var entities = _guestContext.GetEntities();
-                return _responseModel.CreateResponseModel("Success", "The guest returned.", entities);
+                List<UniversalDTO> guestDTOs = UniversalDtoFactory.CreateListFromObjects(entities, new List<string> { });
+                return _responseModel.CreateResponseModel(Status.Ok, "The guest returned.", guestDTOs);
             }
-            return _responseModel.CreateResponseModel("NotFound", "The Guest doesnt exists.");
+            return _responseModel.CreateResponseModel(Status.NotFound, "The Guest doesnt exists.");
 
         }
-        public ResponseModel<Guest> GetGuest(int id)
+        public ResponseModel GetGuest(int id)
         {
             if (_guestContext.CheckEntity(id))
             {
-                var entity = _guestContext.GetEntity(id);
-                return _responseModel.CreateResponseModel("Success", "The guest returned.", entity);
+                var guest = _guestContext.GetEntity(id);
+                var guestDTO = UniversalDtoFactory.CreateFromObject(guest, new List<string> { });
+                return _responseModel.CreateResponseModel(Status.Ok, "The guest returned.", guestDTO);
             }
-            return _responseModel.CreateResponseModel("NotFound", "The Guest doesnt exists.");
+            return _responseModel.CreateResponseModel(Status.NotFound, "The Guest doesnt exists.");
         }
 
-        public ResponseModel<Guest> AddGuest(Guest guest)
+        public ResponseModel AddGuest(Guest guest)
         {
 
             if (!_guestContext.CheckEntity(guest.Id))
             {
                 _guestContext.AddEntity(guest);
-                return _responseModel.CreateResponseModel("Success", "The Guest successfully added.");
+                return _responseModel.CreateResponseModel(Status.Created, "The Guest successfully added.");
             }
-            return _responseModel.CreateResponseModel("Conflict", "The Guest already exists.");
-            
+            return _responseModel.CreateResponseModel(Status.NotFound, "The Guest already exists.");
+
         }
 
-        public ResponseModel<Guest> UpdateGuest(Guest guest)
+        public ResponseModel UpdateGuest(Guest guest)
         {
-            
+
             if (_guestContext.CheckEntity(guest.Id))
             {
                 _guestContext.UpdateEntity(guest);
-                return _responseModel.CreateResponseModel("Success", "The Guest successfully updated.");
+                return _responseModel.CreateResponseModel(Status.Ok, "The Guest successfully updated.");
             }
-            return _responseModel.CreateResponseModel("NotFound", "The guest doesnt exists.");
+            return _responseModel.CreateResponseModel(Status.NotFound, "The guest doesnt exists.");
 
         }
 
-        public ResponseModel<Guest> RemoveGuest(int id)
+        public ResponseModel RemoveGuest(int id)
         {
-            
+
             if (_guestContext.CheckEntity(id))
             {
                 _guestContext.RemoveEntity(id);
-                return _responseModel.CreateResponseModel("Success", "The Guest successfully removed.");
+                return _responseModel.CreateResponseModel(Status.Ok, "The Guest successfully removed.");
             }
-            return _responseModel.CreateResponseModel("NotFound", "The guest doesnt exists.");
+            return _responseModel.CreateResponseModel(Status.NotFound, "The guest doesnt exists.");
 
 
         }

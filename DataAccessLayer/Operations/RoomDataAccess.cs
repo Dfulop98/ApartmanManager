@@ -4,7 +4,6 @@ using DataAccessLayer.DbAccess;
 using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace DataAccessLayer.Operations
 {
@@ -48,7 +47,7 @@ namespace DataAccessLayer.Operations
             _db.SaveChanges();
 
         }
-        public void AddImageToRoom(Room room,RoomImage image)
+        public void AddImageToRoom(Room room, RoomImage image)
         {
             room.Images.Add(image);
             _db.SaveChanges();

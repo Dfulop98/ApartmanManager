@@ -5,10 +5,10 @@ namespace ServiceLayer.ServiceInterfaces
 {
     public interface IGuestService
     {
-        public ResponseModel<Guest> GetGuests();
-        public ResponseModel<Guest> GetGuest(int id);
-        public ResponseModel<Guest> AddGuest(Guest guest);
-        public ResponseModel<Guest> UpdateGuest(Guest guest);
-        public ResponseModel<Guest> RemoveGuest(int id);
+        public ResponseModel GetGuests();
+        public ResponseModel GetGuest(int id);
+        public ResponseModel AddGuest(Guest guest);
+        public ResponseModel UpdateGuest(Guest guest);
+        public ResponseModel RemoveGuest(int id);
     }
 }

@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataModelLayer.Models;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.ServiceInterfaces;
-using DataModelLayer.Models;
-using System.Collections.Generic;
 
 namespace ApartmanManagerApi.Controllers
 {
     public class ReservationController : ControllerBase
     {
         private readonly IReservatonService _reservatonService;
-        public ReservationController(IReservatonService reservatonService) 
+        public ReservationController(IReservatonService reservatonService)
         {
             _reservatonService = reservatonService;
         }
@@ -17,8 +16,8 @@ namespace ApartmanManagerApi.Controllers
         public OkObjectResult GetAllReservations()
         {
             return Ok(_reservatonService.GetReservations());
-        } 
-        
+        }
+
         [HttpGet("/api/reservation/{id}")]
         public OkObjectResult GetReservationById(int id)
         {
@@ -36,7 +35,7 @@ namespace ApartmanManagerApi.Controllers
         {
             return Ok(_reservatonService.UpdateReservation(reservation));
         }
-        
+
         [HttpDelete("/api/reservation/remove/{id}")]
         public OkObjectResult DeleteRoom(int id)
         {

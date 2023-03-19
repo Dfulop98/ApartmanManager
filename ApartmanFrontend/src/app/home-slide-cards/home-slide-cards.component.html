@@ -1,16 +1,21 @@
 <div class="swiper-container">
     <div class="swiper-wrapper">
       <div *ngFor="let room of rooms" class="swiper-slide">
-        <div class="card">
-          <img [src]="'assets/images/' + room.image" [alt]="room.name" />
-          <h3>{{ room.roomNumber }}</h3>
-          <p>{{ room.description }}</p>
-          <div class="footer">
-            <p class="price">{{ room.pricePerNight }}</p>
+        <div *ngIf="room.properties.IsAvailable" class="card">
+          <div class="inner-border"></div>
+            <img [src]="room.properties.Images[0].properties.Url" alt="Room image" />
+            <div class="card-header">
+              <h3>{{ room.properties.RoomNumber }}</h3>
+            </div>
+            <div class="card-body">
+              <p>{{ room.properties.Description }}</p>
+              <p>{{ room.properties.Capacity }}</p>
+            </div>
+            <div class="footer">
+              <p class="price">{{ room.properties.PricePerNight }} euro/ person</p>
+            </div>
           </div>
-        </div>
       </div>
     </div>
-  
     <div class="swiper-pagination"></div>
   </div>
