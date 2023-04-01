@@ -1,5 +1,9 @@
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 /* You can add global styles to this file, and also import other style files */
 body{
-    background-color: #393e46;
+    margin: 0;
+    padding: 0;
+    background-color: white;
     overflow: hidden;
 }

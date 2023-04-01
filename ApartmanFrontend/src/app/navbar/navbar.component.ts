@@ -1,24 +1,36 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faImages } from '@fortawesome/free-solid-svg-icons';
+import {faHome, faBook, faHeadset, faPhoneFlip } from '@fortawesome/free-solid-svg-icons';
+import { BackgroundService } from '../services/background.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent   {
+  
+  constructor(private backgroundService: BackgroundService, private router: Router) {}
+
   @Output() activeIndexChanged = new EventEmitter<number>();
   activeIndex: number = 0;
-
-   navItems = [
-    { title: 'Home', icon: 'home.png', route: '/home' },
-    { title: 'Gallery', icon: 'gallery2.png', route: '/gallery' },
-    { title: 'Book', icon: 'book.png', route: '/book' },
-    { title: 'Contact', icon: 'contact.png', route: '/contact' },
-    { title: 'Support', icon: 'support.png', route: '/support' },
+  iconColor: string = 'white'
+  navItems = [
+    { title: 'Home', icon: faHome, route: '/Home' },
+    { title: 'Gallery', icon: faImages as IconProp, route: '/Gallery' },
+    { title: 'Book', icon: faBook as IconProp, route: '/book' },
+    { title: 'Contact', icon: faPhoneFlip as IconProp, route: '/contact' },
+    { title: 'Support', icon: faHeadset as IconProp, route: '/support' },
   ];
 
   setActiveIndex(index: number): void {
     this.activeIndex = index;
     this.activeIndexChanged.emit(this.activeIndex);
+    this.router.navigate([this.navItems[index].route]);
   }
+
+
+
+  
 }
