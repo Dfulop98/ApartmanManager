@@ -1,7 +1,10 @@
 import { Component,Input, OnInit } from '@angular/core';
 import Swiper from 'swiper';
-import { RoomService } from '../services/room.service';
+import { RoomService } from '../../services/room.service';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { map, Observable } from 'rxjs';
+import { ApiResponse } from '../../interfaces/api-response';
+import { Room } from '../../interfaces/room';
 
 @Component({
   selector: 'app-home-slide-cards',
@@ -10,35 +13,18 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 })
 
 export class HomeSlideCardsComponent implements OnInit {
+  rooms$: Observable<Room[]>
   faUser = faUser;
-  @Input() activeIndex?: number;
+  @Input() activeIndex?: number; 
   swiper?: Swiper;
-
-  rooms: any[] = [];
   
-  constructor(private roomService: RoomService) {}
+  constructor(private roomService: RoomService) {
+    this.rooms$ = this.roomService.getRooms()
+  }
 
   ngOnInit(): void {
-    this.fetchRooms();
+    this.initSwiper();
   }
-
-  fetchRooms(): void {
-    this.roomService.getRooms().subscribe(
-      (data: unknown) => {
-        if (typeof data === 'object' && data !== null && 'models' in data) {
-          this.rooms = (data as any).models;
-          console.log((data as any).models);
-          this.initSwiper();
-        } else {
-          console.error('Unexpected data format:', data);
-        }
-      },
-      (error) => {
-        console.error('Error fetching rooms:', error);
-      }
-    );
-  }
-
   initSwiper(): void {
     this.swiper = new Swiper('.swiper-container', {
       slidesPerView: 'auto',
@@ -50,7 +36,6 @@ export class HomeSlideCardsComponent implements OnInit {
         el: '.swiper-pagination',
         clickable: true
       }
-      
     });
   }
 }

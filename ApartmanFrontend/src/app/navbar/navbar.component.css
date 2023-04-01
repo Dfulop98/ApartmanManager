@@ -1,7 +1,7 @@
 
 @media (max-width: 860px) {
     .navbar {
-        background-color: #222831;
+        background-color: hsla(236, 11%, 25%, 0.934);
         position: fixed;
         bottom: 0;
         left: 0;
@@ -48,21 +48,24 @@
 
     .nav-button{
         transition: background-color 0.3s ease-in-out;
-        max-height: 2rem;
+        max-height: 1.5rem;
+        padding-top: 5px;
     }
 
     .link.active{
-        border-top: 1px solid hsl(28, 100%, 35%);
+        border-top: 1px solid white;
+        
     }
 
-        .button-img{
-            height: 32px;
-        }
-        .button-title{
-            font-size: 10px;
-            color:#eeeeee;
-            margin-top: -10px;
-        }
+    .button-img{
+        height: 32px;
+    }
+    .button-title{
+        font-size: 10px;
+        font-weight: thin;
+        color:#eeeeee;
+        margin-top: -3px;
+    }
 }
 
 @media (max-width: 340px) {
@@ -115,11 +118,12 @@
     }
 
         .nav-button:hover, .nav-button:focus {
-            background-color: hsl(28, 100%, 35%);
         }
 
         .button-img{
             height: 32px;
+            --fa-primary-color: #cc5f00;
+            --fa-secondary-color: #b35300;
         }
         .button-title{
             font-size: 10px;

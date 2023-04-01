@@ -1,8 +1,10 @@
+
 <div class="navbar">
     <div class="nav-menu">
       <div *ngFor="let navItem of navItems; let i = index" class="link" [class.active]="i === activeIndex" (click)="setActiveIndex(i)">
+        
         <div class="nav-button">
-          <img class="button-img" [src]="'../../assets/nav_icons/' + navItem.icon" [alt]="navItem.title + '-icon'">
+          <fa-icon [icon]="navItem.icon" [style.color]="iconColor"></fa-icon>
           <p class="button-title">{{ navItem.title }}</p>
         </div>
       </div>
