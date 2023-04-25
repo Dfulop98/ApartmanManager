@@ -1,0 +1,25 @@
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div *ngFor="let room of rooms$ | async" class="swiper-slide">
+        <div *ngIf="room.properties.IsAvailable" class="card">
+          <img [src]="room.properties.Images[0].properties.Url" alt="Room image" />
+          <div class="inner-border"></div>
+            <div class="card-header">
+              <h1>{{ room.properties.RoomNumber }}</h1>
+              <p>
+                {{ room.properties.Capacity }}
+                <fa-icon [icon]="faUser"></fa-icon>
+              </p>
+            </div>
+            <div class="card-body">
+              <p>{{ room.properties.Description }}</p>
+            </div>
+            <div class="footer">
+              <!-- <p class="price">{{ room.properties.PricePerNight }} euro/<fa-icon [icon]="faUser"></fa-icon></p> -->
+              <button class="checkin-button"> check in </button>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>

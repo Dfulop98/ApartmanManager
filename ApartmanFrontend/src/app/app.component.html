@@ -1,2 +1,10 @@
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<div  class="page-wrapper">
+    <div class="footer"><app-navbar (activeIndexChanged)="onActiveIndexChanged($event)"></app-navbar> </div>
+    <div class="page">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="header">
+        <p> Rental Master </p>    
+    </div>
+</div>
+

@@ -22,7 +22,6 @@ namespace DataModelLayer.Models
         [StringLength(200)]
         public string Address { get; set; }
 
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }

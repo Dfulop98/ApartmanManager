@@ -58,23 +58,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Guests");
                 });
 
-            modelBuilder.Entity("DataModelLayer.Models.OutSideImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OutSideImages");
-                });
-
             modelBuilder.Entity("DataModelLayer.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
