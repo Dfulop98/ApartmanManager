@@ -9,6 +9,5 @@
         void AddEntity(T entity);
         void UpdateEntity(T entity);
         void RemoveEntity(int id);
-
     }
 }
