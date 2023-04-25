@@ -16,5 +16,7 @@ namespace DataAccessLayer.DbAccess
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<RoomImage> RoomImages { get; set; }
+        public DbSet<OutSideImage> OutSideImages { get; set; }
+        public DbSet<OutSideImage> PaintballImages { get; set; }
     }
 }
