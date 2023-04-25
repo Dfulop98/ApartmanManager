@@ -36,7 +36,9 @@ builder.Services.AddTransient(typeof(IGenericDataAccess<>), typeof(GenericDataAc
 builder.Services.AddTransient<IResponseModelFactory, ResponseModelFactory>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IRoomDataAccess, RoomDataAccess>();
+builder.Services.AddTransient<IImagesDataAccess, ImagesDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
+builder.Services.AddTransient<IImagesService, ImagesService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
