@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataModelLayer.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,11 +8,17 @@ using System.Threading.Tasks;
 
 namespace DataModelLayer.Models
 {
-    public class PaintballImage
+    public class Images : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
         public string Url { get; set; }
+
+        [Required]
+        public string Type { get; set; }
+
+        public Room? Room { get; set; }
     }
 }

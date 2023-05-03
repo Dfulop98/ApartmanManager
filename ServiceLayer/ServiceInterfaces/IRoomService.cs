@@ -1,4 +1,5 @@
 ﻿using DataModelLayer.Models;
+using DTOLayer.Models;
 using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.ServiceInterfaces
@@ -6,12 +7,12 @@ namespace ServiceLayer.ServiceInterfaces
     public interface IRoomService
     {
 
-        public ResponseModel GetRooms();
-        public ResponseModel GetRoom(int id);
-        public ResponseModel AddRoom(Room room);
-        public ResponseModel UpdateRoom(Room room);
-        public ResponseModel RemoveRoom(int id);
-        public ResponseModel AddImage(Stream imageStream, string imageName, int roomId);
+        public Result<List<UniversalDTO>> GetRooms();
+        public Result<UniversalDTO> GetRoom(int id);
+        public Result<Room> AddRoom(Room room);
+        public Result<Room> UpdateRoom(Room room);
+        public Result<Room> RemoveRoom(int id);
+        public Result<Room> LinkImageToRoom(Images images, int roomId);
 
     }
 }

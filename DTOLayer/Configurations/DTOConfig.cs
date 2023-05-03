@@ -22,7 +22,8 @@ namespace DTOLayer.Configurations
         public static List<string> ImagesProperties { get; } = new List<string>
         {
             "Id",
-            "Url"
+            "Url",
+            "Type"
         };
 
         public static Dictionary<string, IEnumerable<string>> RoomIncludedProperties { get; } = new Dictionary<string, IEnumerable<string>>

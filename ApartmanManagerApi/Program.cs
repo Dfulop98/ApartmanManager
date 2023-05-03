@@ -3,8 +3,6 @@ using DataAccessLayer.DbAccess;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Operations;
 using Microsoft.EntityFrameworkCore;
-using ServiceLayer.Factories;
-using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
 
@@ -33,12 +31,13 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddTransient(typeof(IGenericDataAccess<>), typeof(GenericDataAccess<>));
-builder.Services.AddTransient<IResponseModelFactory, ResponseModelFactory>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddTransient<IRoomDataAccess, RoomDataAccess>();
 builder.Services.AddTransient<IImagesDataAccess, ImagesDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
+builder.Services.AddTransient<IGuestService, GuestService>();
+builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IImagesService, ImagesService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

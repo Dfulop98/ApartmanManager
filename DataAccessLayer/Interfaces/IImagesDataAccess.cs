@@ -9,8 +9,10 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IImagesDataAccess
     {
-        public bool CheckImages();
-        public List<OutSideImage> GetImages();
-        public void AddImage(OutSideImage image);
+        public bool CheckAnyImages();
+        public bool CheckImagesByType(string type);
+        public List<Images> GetAllImages();
+        public List<Images> GetImagesByType(string type);
+        public void AddImage(Images image);
     }
 }

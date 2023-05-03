@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AMDbContext))]
-    [Migration("20230401140758_addImagesTable")]
-    partial class addImagesTable
+    [Migration("20230503205929_intiDB")]
+    partial class intiDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,7 +60,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Guests");
                 });
 
-            modelBuilder.Entity("DataModelLayer.Models.OutSideImage", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Images", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,13 +68,22 @@ namespace DataAccessLayer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutSideImages");
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("DataModelLayer.Models.Payment", b =>
@@ -172,26 +181,13 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("DataModelLayer.Models.RoomImage", b =>
+            modelBuilder.Entity("DataModelLayer.Models.Images", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.HasOne("DataModelLayer.Models.Room", "Room")
+                        .WithMany("Images")
+                        .HasForeignKey("RoomId");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("RoomImages");
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("DataModelLayer.Models.Payment", b =>
@@ -212,17 +208,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataModelLayer.Models.RoomImage", b =>
-                {
-                    b.HasOne("DataModelLayer.Models.Room", "Room")
-                        .WithMany("Images")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("DataModelLayer.Models.Room", b =>

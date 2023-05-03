@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using DataModelLayer.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataModelLayer.Models
 {
-    public class Payment
+    public class Payment: IEntity
     {
         public int Id { get; set; }
 
