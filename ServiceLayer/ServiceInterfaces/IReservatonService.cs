@@ -1,16 +1,15 @@
 ﻿using DataModelLayer.Models;
-using DTOLayer.Models;
 using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.ServiceInterfaces
 {
-    public interface IReservationService
+    public interface IReservatonService
     {
-        public Result<List<UniversalDTO>> GetReservations();
-        public Result<UniversalDTO> GetReservation(int id);
-        public Result<Reservation> AddReservation(Reservation reservation);
-        public Result<Reservation> RemoveReservation(int id);
-        public Result<Reservation> UpdateReservation(Reservation reservation);
+        public ResponseModel GetReservations();
+        public ResponseModel GetReservation(int id);
+        public ResponseModel AddReservation(Reservation reservation);
+        public ResponseModel RemoveReservation(int id);
+        public ResponseModel UpdateReservation(Reservation reservation);
 
     }
 }

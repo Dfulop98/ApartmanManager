@@ -1,120 +1,99 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataModelLayer.Models;
 using DTOLayer.Factories;
-using DTOLayer.Models;
+using ServiceLayer.Common;
+using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
 
 namespace ServiceLayer.Services
 {
-    public class ReservationService : IReservationService
+    public class ReservationService : IReservatonService
     {
-        private readonly IGenericDataAccess<Reservation> _context;
+        private readonly IGenericDataAccess<Reservation> _reservationContext;
+        private readonly IGenericDataAccess<Room> _roomContext;
+        private readonly IResponseModelFactory _responseModel;
         public ReservationService(
             IGenericDataAccess<Reservation> reservationContext
+            , IGenericDataAccess<Room> roomContext
+            , IResponseModelFactory responseModel
             )
         {
-            _context = reservationContext;
+            _reservationContext = reservationContext;
+            _roomContext = roomContext;
+            _responseModel = responseModel;
         }
 
-        public Result<List<UniversalDTO>> GetReservations()
+        public ResponseModel GetReservations()
         {
-            try
+            if (_reservationContext.CheckEntities())
             {
-                var reservations = _context.GetEntities();
-                var reservationsDTOs = UniversalDtoFactory.CreateListFromObjects(
-                    reservations,
-                    new List<string> { "Id", "CheckInDate", "CheckOutDate", "RoomId" });
-
-                return Result<List<UniversalDTO>>.Success(reservationsDTOs);
+                var entities = _reservationContext.GetEntities();
+                var entityDTOs = UniversalDtoFactory.CreateListFromObjects(
+                    entities,
+                    new List<string> { "Id", "CheckInDate", "CheckOutDate", "RoomId" }
+                    );
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.ReservationsGetOk, entityDTOs);
             }
-            catch ( Exception ex )
-            {
-                return Result<List<UniversalDTO>>.Failure($"error during get reservations {ex.Message}");
-            }
-            
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.ReservationNotFound);
 
         }
-        public Result<UniversalDTO> GetReservation(int id)
+        public ResponseModel GetReservation(int id)
         {
-
-            if (id < 0)
-                return Result<UniversalDTO>.Failure("id param is invalid");
-
-            try
+            if (_reservationContext.CheckEntity(id))
             {
-                Reservation reservation = _context.GetEntity(id);
-                UniversalDTO reservationDTO = UniversalDtoFactory.CreateFromObject(
-                    reservation,
-                    new List<string> { });
-
-                return Result<UniversalDTO>.Success(reservationDTO);
-
+                var entity = _reservationContext.GetEntity(id);
+                var entityDTO = UniversalDtoFactory.CreateFromObject(entity, new List<string> { });
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.ReservationGetOk, entityDTO);
             }
-            catch( Exception ex )
-            {
-                return Result<UniversalDTO>.Failure($"error during get reservation {ex.Message}");
-            }
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.ReservationNotFound);
         }
 
 
-        public Result<Reservation> AddReservation(Reservation reservation)
+        public ResponseModel AddReservation(Reservation reservation)
         {
-            if (_context.CheckEntity(reservation.Id))
-                return Result<Reservation>.Failure("reservation already exists!");
-
-            if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate < DateTime.Now)
-                return Result<Reservation>.Failure("reservation date invalid");
-
-            // Ask Kornel , how to check connected room is exits without make dependencies with other service
-            try
+            if (_reservationContext.CheckEntity(reservation.Id))
             {
-                _context.AddEntity(reservation);
-                return Result<Reservation>.Success(reservation);
+                return _responseModel.CreateResponseModel(Status.Conflict, Messages.ReservationConflict);
             }
-            catch(Exception ex)
+            else
             {
-                return Result<Reservation>.Failure($"error during adding new reservation :{ex.Message}");
-            }
-            
-            
-        }
-
-        public Result<Reservation> UpdateReservation(Reservation reservation)
-        {
-            if (!_context.CheckEntity(reservation.Id))
-                return Result<Reservation>.Failure("reservation doesn't exist!");
-
-            if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate < DateTime.Now)
-                return Result<Reservation>.Failure("reservation date invalid");
-
-            try
-            {
-                _context.UpdateEntity(reservation);
-                return Result<Reservation>.Success(reservation);
-
-            }
-            catch
-            {
-                return Result<Reservation>.Failure("error during updating reservation");
+                if (reservation.CheckInDate > reservation.CheckOutDate || reservation.CheckInDate < DateTime.Now)
+                {
+                    return _responseModel.CreateResponseModel(Status.BadRequest, Messages.ReservationDateBadRequest);
+                }
+                if (_roomContext.CheckEntity(reservation.RoomId))
+                {
+                    var relatedRoom = _roomContext.GetEntity(reservation.RoomId);
+                    if (relatedRoom.IsAvailable)
+                    {
+                        _reservationContext.AddEntity(reservation);
+                        return _responseModel.CreateResponseModel(Status.Created, Messages.ReservationCreated);
+                    }
+                    return _responseModel.CreateResponseModel(Status.Conflict, Messages.ReservationRoomConflict);
+                }
+                return _responseModel.CreateResponseModel(Status.BadRequest, Messages.ReservationRoomBadRequest);
             }
         }
 
-        public Result<Reservation> RemoveReservation(int id)
+        public ResponseModel UpdateReservation(Reservation reservation)
         {
-            if (_context.CheckEntity(id))
-                return Result<Reservation>.Failure("reservation doesn't exists");
+            if (_reservationContext.CheckEntity(reservation.Id))
+            {
+                _reservationContext.UpdateEntity(reservation);
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.ReservationUpdated);
+            }
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.ReservationNotFound);
+        }
 
-            try
+        public ResponseModel RemoveReservation(int id)
+        {
+            if (_reservationContext.CheckEntity(id))
             {
-                Reservation removedReservation = _context.GetEntity(id);
-                _context.RemoveEntity(id);
-                return Result<Reservation>.Success(removedReservation);
+                _reservationContext.RemoveEntity(id);
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.ReservationDeleted);
             }
-            catch(Exception ex)
-            {
-                return Result<Reservation>.Failure($"error during remove reservation {ex.Message}");
-            }
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.ReservationNotFound);
         }
 
     }

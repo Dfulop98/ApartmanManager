@@ -1,11 +1,10 @@
 ﻿
-using DataModelLayer.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 
 namespace DataModelLayer.Models
 {
-    public class Reservation : IEntity
+    public class Reservation
     {
         public int Id { get; set; }
 

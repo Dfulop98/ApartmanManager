@@ -1,11 +1,10 @@
 ﻿
-using DataModelLayer.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 
 namespace DataModelLayer.Models
 {
-    public class Guest :IEntity
+    public class Guest
     {
 
         [Key]

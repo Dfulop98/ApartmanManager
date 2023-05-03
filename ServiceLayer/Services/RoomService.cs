@@ -3,6 +3,9 @@ using DataModelLayer.Models;
 using DTOLayer.Configurations;
 using DTOLayer.Factories;
 using DTOLayer.Models;
+using ServiceLayer.Common;
+using ServiceLayer.Factories;
+using ServiceLayer.Factories.Interfaces;
 using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
 
@@ -10,18 +13,23 @@ namespace ServiceLayer.Services
 {
     public class RoomService : IRoomService
     {
+        private readonly IResponseModelFactory _responseModel;
         private readonly IGenericDataAccess<Room> _context;
+        private readonly IRoomDataAccess _roomContext;
         public RoomService(
-            IGenericDataAccess<Room> context
+            IGenericDataAccess<Room> context,
+            IResponseModelFactory responseModel,
+            IRoomDataAccess roomContext
             )
         {
             _context = context;
+            _responseModel = responseModel;
+            _roomContext = roomContext;
         }
 
-        public Result<List<UniversalDTO>> GetRooms()
+        public ResponseModel GetRooms()
         {
             bool roomExists = _context.CheckEntities();
-
             if (roomExists)
             {
                 List<Room> rooms = _context.GetEntities("Images");
@@ -30,15 +38,16 @@ namespace ServiceLayer.Services
                     DTOConfig.RoomProperties,
                     DTOConfig.RoomIncludedProperties);
 
-                return Result<List<UniversalDTO>>.Success(roomDTOs);
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.RoomsGetOk, roomDTOs);
             }
-            
-            return Result<List<UniversalDTO>>.Failure("Rooms not found");
-            
+            else
+            {
+                return _responseModel.CreateResponseModel(Status.NotFound, Messages.RoomNotFound);
+            }
         }
 
 
-        public Result<UniversalDTO> GetRoom(int id)
+        public ResponseModel GetRoom(int id)
         {
 
             if (_context.CheckEntity(id))
@@ -48,69 +57,68 @@ namespace ServiceLayer.Services
                     room,
                     DTOConfig.RoomProperties,
                     DTOConfig.RoomIncludedProperties);
-                return Result<UniversalDTO>.Success(roomDTO);
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.RoomGetOk, roomDTO);
             }
 
-            return Result<UniversalDTO>.Failure("Room not found.");
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.RoomNotFound);
 
 
         }
-        public Result<Room> AddRoom(Room room)
+        public ResponseModel AddRoom(Room room)
         {
-            if (!_context.CheckEntity(room.Id))
+            if (_context.CheckEntity(room.Id))
             {
-                _context.AddEntity(room);
-                return Result<Room>.Success(room);
+                return _responseModel.CreateResponseModel(Status.Conflict, Messages.RoomConflict);
             }
-            return Result<Room>.Failure("The Room already exists.");
+
+            _context.AddEntity(room);
+            return _responseModel.CreateResponseModel(Status.Created, Messages.RoomCreated);
+
         }
 
-        public Result<Room> UpdateRoom(Room room)
+        public ResponseModel UpdateRoom(Room room)
         {
             if (_context.CheckEntity(room.Id))
             {
                 _context.UpdateEntity(room);
-                return Result<Room>.Success(room);
-
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.RoomUpdated);
             }
-            return Result<Room>.Failure("Room not found.");
+
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.RoomNotFound);
+
+
         }
 
-        public Result<Room> RemoveRoom(int id)
+        public ResponseModel RemoveRoom(int id)
         {
 
             if (_context.CheckEntity(id))
             {
-                var removedEntity = _context.GetEntity(id);
-
                 _context.RemoveEntity(id);
-                return Result<Room>.Success(removedEntity);
+                return _responseModel.CreateResponseModel(Status.Ok, Messages.RoomDeleted);
             }
-            return Result<Room>.Failure("The Room doesn't exists.");
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.RoomNotFound);
 
         }
 
-        public Result<Room> LinkImageToRoom(Images images, int roomId)
+        public ResponseModel AddImage(Stream imageStream, string imageName, int roomId)
         {
-            if (images == null)
-                return Result<Room>.Failure("Images param is null");
-
-            if (roomId < 0)
-                return Result<Room>.Failure("invalid roomid param");
-
-            try
+            if (_context.CheckEntity(roomId))
             {
-                var room = _context.GetEntity(roomId);
-                room.Images.Add(images);
-                _context.UpdateEntity(room);
+                string ImageUrl = GoogleCloudStorageService.UploadImage(imageStream, imageName);
+                Room room = _context.GetEntity(roomId);
+                RoomImage image = new()
+                {
+                    Url = ImageUrl,
+                    Room = room,
+                };
+                room.Images ??= new List<RoomImage>();
+                _roomContext.AddImage(image);
+                _roomContext.AddImageToRoom(room, image);
+                return _responseModel.CreateResponseModel(Status.Created, Messages.ImagesCreated);
 
-                return Result<Room>.Success(room);
             }
-            catch (Exception ex)
-            {
-                return Result<Room>.Failure($"error during linking images to room: {ex.Message}");
-            }
-                 
+            return _responseModel.CreateResponseModel(Status.NotFound, Messages.RoomNotFound);
         }
 
     }

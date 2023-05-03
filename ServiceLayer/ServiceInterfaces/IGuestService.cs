@@ -1,15 +1,14 @@
 ﻿using DataModelLayer.Models;
-using DTOLayer.Models;
 using ServiceLayer.Factories.Model;
 
 namespace ServiceLayer.ServiceInterfaces
 {
     public interface IGuestService
     {
-        public Result<List<UniversalDTO>> GetGuests();
-        public Result<UniversalDTO> GetGuest(int id);
-        public Result<Guest> AddGuest(Guest guest);
-        public Result<Guest> UpdateGuest(Guest guest);
-        public Result<Guest> RemoveGuest(int id);
+        public ResponseModel GetGuests();
+        public ResponseModel GetGuest(int id);
+        public ResponseModel AddGuest(Guest guest);
+        public ResponseModel UpdateGuest(Guest guest);
+        public ResponseModel RemoveGuest(int id);
     }
 }

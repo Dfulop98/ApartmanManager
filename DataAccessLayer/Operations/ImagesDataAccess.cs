@@ -14,23 +14,16 @@ namespace DataAccessLayer.Operations
         {
             _db= db;
         }
-        public bool CheckAnyImages() => _db.Images.Any();
-
-        public bool CheckImagesByType(string type) => _db.Images.Any(x => x.Type == type);
-        
-        public List<Images> GetAllImages()
+        public bool CheckImages() => _db.OutSideImages.Any();
+        public List<OutSideImage> GetImages()
         {
-             return _db.Images.ToList();
+             return _db.OutSideImages.ToList();
         }
-        public List<Images> GetImagesByType(string type)
+        public void AddImage(OutSideImage image)
         {
-            return _db.Images.Where(i => i.Type == type).ToList();
-        }
-        public void AddImage(Images image)
-        {
-            _db.Images.Add(image);
+            _db.OutSideImages.Add(image);
             _db.SaveChanges();
-        }
 
+        }
     }
 }

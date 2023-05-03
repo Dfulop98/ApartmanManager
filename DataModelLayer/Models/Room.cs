@@ -28,6 +28,6 @@ namespace DataModelLayer.Models
 
         public List<Reservation> Reservations { get; set; }
 
-        public List<Images> Images { get; set; }
+        public List<RoomImage> Images { get; set; }
     }
 }
