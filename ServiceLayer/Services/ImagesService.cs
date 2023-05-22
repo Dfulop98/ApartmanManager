@@ -38,17 +38,7 @@ namespace ServiceLayer.Services
                 return Result<List<UniversalDTO>>.Failure($"error during get images: {ex.Message}");
             }
 
-            //if (_context.CheckAnyImages())
-            //{
-
-            //    List<Images> images = _context.GetAllImages();
-            //    List<UniversalDTO> imagesDTOs = UniversalDtoFactory.CreateListFromObjects(
-            //        images,
-            //        DTOConfig.ImagesProperties);
-            //    return Result<List<UniversalDTO>>.Success(imagesDTOs);
-            //}
-            //return Result<List<UniversalDTO>>.Failure("images doesn't exist.");
-            
+           
         }
         public Result<List<UniversalDTO>> GetImagesByType(string type)
         {

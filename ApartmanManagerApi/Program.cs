@@ -13,7 +13,8 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 builder.Services.AddSingleton(builder.Configuration);
 builder.Services.AddDbContext<AMDbContext>(options =>
-    options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+    //options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+    options.UseInMemoryDatabase("ApartmanDB"));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", builder =>

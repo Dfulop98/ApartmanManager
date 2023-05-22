@@ -13,6 +13,8 @@ namespace ServiceLayer.ServiceInterfaces
     {
         public Result<List<UniversalDTO>> GetAllImages();
         public Result<List<UniversalDTO>> GetImagesByType(string type);
+
+        public Result<List<UniversalDTO>> GetImagesByRoomId(int id);
         public Result<Images> AddImage(Stream imageStream, string imageName, string type);
     }
 }

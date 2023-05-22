@@ -57,6 +57,10 @@ namespace ServiceLayer.Services
         }
         public Result<Room> AddRoom(Room room)
         {
+            if(room.RoomNumber == null)
+            {
+                return Result<Room>.Failure("The RoomNumber cannot be null");
+            }
             if (!_context.CheckEntity(room.Id))
             {
                 _context.AddEntity(room);
