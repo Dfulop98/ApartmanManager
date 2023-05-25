@@ -1,0 +1,46 @@
+.navbar{
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 3.25rem;
+    z-index: 1;
+    background: rgba(170, 167, 167, 0.131);
+}
+
+.home_container, .about_container, .gallery_container, .dapp_container{ 
+    border: 1px solid purple;
+    display: inline-block;
+    align-items: center;
+    width: 8rem;
+    height:inherit;
+}
+
+.home_container{
+    margin-left: 1rem;
+}
+.gallery_container{ 
+    margin-left: 0.75rem;
+}
+.about_container{
+    margin-left: 0.75rem;
+}
+.dapp_container{
+    position: absolute;
+    right: 0;
+}
+
+.home , .about , .gallery, .dapp{
+    border: 1px solid green;
+    height: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dapp{
+    font-size: 18px;
+    width: 100%;
+    background: none;
+}
