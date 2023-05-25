@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:4200") // Angular alkalmazásod URL-je
+        builder.WithOrigins("http://localhost:3000") // Nextjs alkalmazásod URL-je
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
