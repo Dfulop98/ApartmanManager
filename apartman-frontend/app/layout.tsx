@@ -1,14 +1,14 @@
 import './globals.css'
-import {Inter} from 'next/font/google'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import Navbar from './components/navbar'
+import Navbar from '@/components/navbar/navbar'
 
-const inter = Inter({subsets:['latin']})
 export const metadata: Metadata = {
   title: 'homepage',
   description: 'welcome to home page',
+
 }
+
+
 export default function RootLayout({
   children,
 }: {
@@ -21,7 +21,7 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className={inter.className}>
+      <body >
         <Navbar/>
         {children}
       </body>
