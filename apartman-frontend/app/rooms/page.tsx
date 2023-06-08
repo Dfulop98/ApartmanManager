@@ -1,30 +1,19 @@
 import { Metadata } from "next";
-import getAllRoom from "@/lib/getAllRoom";
-import Link from "next/link";
 
+import getAllRooms from "@/lib/getAllRooms";
+import { Room } from "@/types";
+
+import RoomCard from "@/components/roomCard/roomCard";
+ 
 export const metadata: Metadata = {
     title: "Rooms"
 }
 export default async function RoomsPage() {
-    const roomsData: Promise<Room[]> = getAllRoom();
+    const roomsData: Promise<Room[]> =  getAllRooms();
     const rooms = await roomsData;
-    console.log(rooms)
-    const content = (
-        <section>
-            <h2>
-                <Link href="/"> back to home</Link>
-            </h2>
-            <br />
-            {rooms.map(room => {
-                return(
-                    <>
-                        <p key={room.properties.Id}>
-                            <Link href={`/rooms/${room.properties.Id}`}> {room.properties.Description}</Link>
-                        </p>
-                    </>
-                )
-                })}
-        </section>
+
+    return (
+        <RoomCard params={rooms} />
     )
-    return content
+
 }
