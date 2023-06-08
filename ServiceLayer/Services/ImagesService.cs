@@ -60,30 +60,30 @@ namespace ServiceLayer.Services
             }
         }
 
-        public Result<List<UniversalDTO>> GetImagesByRoomId(int id)
-        {
-            if(id < 0)
-                Result<List<UniversalDTO>>.Failure("incorrect id param");
+        //public Result<List<UniversalDTO>> GetImagesByRoomId(int id)
+        //{
+        //    if(id < 0)
+        //        Result<List<UniversalDTO>>.Failure("incorrect id param");
 
-            try
-            {
-                List<Images> images = _context.GetImagesByType("Room");
-                List<Images> roomImages = images.Where(i => i.Room.Id == id).ToList();
+        //    try
+        //    {
+        //        List<Images> images = _context.GetImagesByType("Room");
+        //        List<Images> roomImages = images.Where(i => i.Room.Id == id).ToList();
                 
-                List<UniversalDTO> roomImagesDTOs = UniversalDtoFactory.CreateListFromObjects(
-                    roomImages,
-                    DTOConfig.ImagesProperties);
+        //        List<UniversalDTO> roomImagesDTOs = UniversalDtoFactory.CreateListFromObjects(
+        //            roomImages,
+        //            DTOConfig.ImagesProperties);
 
-                if (roomImagesDTOs.Count() == 0)
-                    return Result<List<UniversalDTO>>.Failure("there is no Image with this id!"); 
+        //        if (roomImagesDTOs.Count() == 0)
+        //            return Result<List<UniversalDTO>>.Failure("there is no Image with this id!"); 
 
-                return Result<List<UniversalDTO>>.Success(roomImagesDTOs);
+        //        return Result<List<UniversalDTO>>.Success(roomImagesDTOs);
 
-            }catch(Exception ex) 
-            { 
-                return Result<List<UniversalDTO>>.Failure($"error during get images by room id {ex.Message}");
-            }
-        }
+        //    }catch(Exception ex) 
+        //    { 
+        //        return Result<List<UniversalDTO>>.Failure($"error during get images by room id {ex.Message}");
+        //    }
+        //}
 
         public Result<Images> AddImage(Stream imageStream, string imageName, string type)
         {
@@ -105,7 +105,7 @@ namespace ServiceLayer.Services
             Images image = new()
             {
                 Url = imageUrl,
-                Type = type,
+                Type = type
             };
 
             try
