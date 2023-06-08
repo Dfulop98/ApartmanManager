@@ -6,23 +6,21 @@ namespace DataAccessLayer.DbAccess
 {
     public class AMDbContextFactory : IDesignTimeDbContextFactory<AMDbContext>
     {
-
         public AMDbContext CreateDbContext(string[] args)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../ApartmanManagerApi"))
             .AddJsonFile("appsettings.json")
             .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<AMDbContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection")
+            var connectionString = configuration.GetConnectionString("MsSqlConnection")
                 ?? throw new InvalidOperationException("Connection string is null or empty.");
 
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseSqlServer(connectionString);
 
             return new AMDbContext(optionsBuilder.Options);
         }
-
     }
+
 }

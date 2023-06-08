@@ -10,6 +10,10 @@ namespace DataAccessLayer.DbAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Room>()
+                .Property(r => r.IsAvailable)
+                .HasColumnType("bit");
         }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
