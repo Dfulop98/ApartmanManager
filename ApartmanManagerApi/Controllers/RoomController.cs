@@ -80,7 +80,7 @@ namespace ApartmanManagerApi.Controllers
         }
 
         [HttpPost("LinkImage/{id}")]
-        public ActionResult<Result<Room>> LinkImageToRoom([FromBody] Images images, int id)
+        public ActionResult<Result<Room>> LinkImageToRoom(Images images, int id)
         {
             var result = _roomService.LinkImageToRoom(images, id);
             if (result.IsSuccess)
