@@ -105,7 +105,12 @@ namespace ServiceLayer.Services
             try
             {
                 var room = _context.GetEntity(roomId);
+                if (room == null)
+                    return Result<Room>.Failure("A szoba nem található a megadott azonosítóval.");
+
+                room.Images ??= new List<Images>();
                 room.Images.Add(images);
+
                 _context.UpdateEntity(room);
 
                 return Result<Room>.Success(room);

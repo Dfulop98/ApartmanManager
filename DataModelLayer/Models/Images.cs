@@ -19,6 +19,5 @@ namespace DataModelLayer.Models
         [Required]
         public string Type { get; set; }
 
-        public Room? Room { get; set; }
     }
 }

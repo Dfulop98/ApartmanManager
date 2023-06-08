@@ -5,7 +5,10 @@ namespace DTOLayer.Factories
 {
     public class UniversalDtoFactory
     {
-        public static UniversalDTO CreateFromObject(object obj, IEnumerable<string> propertyNames, IDictionary<string, IEnumerable<string>> includedProperties = null)
+        public static UniversalDTO CreateFromObject(
+            object obj,
+            IEnumerable<string> propertyNames,
+            IDictionary<string, IEnumerable<string>> includedProperties = null)
         {
             var dto = new UniversalDTO();
             var type = obj.GetType();
@@ -22,7 +25,12 @@ namespace DTOLayer.Factories
                         var list = new List<UniversalDTO>();
                         foreach (var item in collection)
                         {
-                            list.Add(CreateFromObject(item, includedProperties != null && includedProperties.ContainsKey(propertyName) ? includedProperties[propertyName] : item.GetType().GetProperties().Select(p => p.Name)));
+                            list.Add(CreateFromObject(item,
+                                includedProperties != null &&
+                                includedProperties.ContainsKey(propertyName) ?
+                                includedProperties[propertyName] : item.GetType()
+                                .GetProperties()
+                                .Select(p => p.Name)));
                         }
                         dto.SetProperty(propertyName, list);
                     }
@@ -36,7 +44,11 @@ namespace DTOLayer.Factories
             return dto;
         }
 
-        public static List<UniversalDTO> CreateListFromObjects<T>(IEnumerable<T> objects, List<string> propertiesToInclude = null, IDictionary<string, IEnumerable<string>> includedProperties = null)
+        public static List<UniversalDTO> CreateListFromObjects<T>(
+            IEnumerable<T> objects,
+            List<string> propertiesToInclude = null,
+            IDictionary<string, IEnumerable<string>> includedProperties = null
+            )
         {
             var dtoList = new List<UniversalDTO>();
 
