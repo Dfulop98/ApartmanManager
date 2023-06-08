@@ -6,22 +6,36 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
     "@next/font": "13.4.3",
+    "@sentry/wizard": "^3.2.2",
     "@types/node": "20.2.3",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "@web3-react/core": "^8.2.0",
     "axios": "^1.4.0",
+    "classnames": "^2.3.2",
     "eslint": "8.41.0",
-    "eslint-config-next": "13.4.3",
+    "eslint-config-next": "^13.4.4",
     "ethers": "^6.4.0",
-    "next": "^13.4.3",
+    "next": "^13.4.4",
+    "nvm": "^0.0.4",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-easy-swipe": "^0.0.23",
+    "react-icons": "^4.9.0",
+    "react-image-gallery": "^1.2.11",
+    "react-responsive-carousel": "^3.2.23",
     "typescript": "5.0.4",
-    "web3": "^1.10.0"
+    "web3": "^1.10.0",
+    "yet-another-react-lightbox": "^3.10.2"
+  },
+  "devDependencies": {
+    "@types/react-image-gallery": "^1.2.0"
   }
 }

@@ -8,3 +8,6 @@ coverage
 .*
 README.md
 coverage.json
+.yarn
+.next
+dist
