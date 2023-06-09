@@ -2,12 +2,14 @@
     width: 19rem;
     height: 20rem;
     position: relative;
+    border-radius: 15px;
 }
 
 .carousel > ul{
     margin: 0;
     padding: 0;
     list-style:none
+    
 }
 
 .slide{
@@ -15,7 +17,8 @@
     inset: 0;
     opacity: 0;
     transition: 200ms opacity easy-in-out;
-    transition-delay: 200ms ;
+    transition-delay: 200ms;
+    
 }
 
 .slide > Image {
@@ -24,12 +27,18 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    
 }
 .slide[data-active]{
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid grey;
     opacity: 1;
     z-index: 5;
     transition-delay: 0ms;
+    
 }
+
 
 .carousel_button{
     position: absolute;
