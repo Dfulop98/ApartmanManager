@@ -64,7 +64,7 @@ This project is under development, so not all segment working yet.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+For install dependecies follow the next section.
 
 * npm
 
