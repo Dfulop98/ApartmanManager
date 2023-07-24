@@ -1,7 +1,6 @@
-import { Params } from "@/types";
 
-export default function RoomsPage({ params: {roomId}}: Params) {
+export default function RoomsPage() {
   return (
-    <div>{roomId}</div>
+    <div></div>
   )
 }
