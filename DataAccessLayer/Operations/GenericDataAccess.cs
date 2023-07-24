@@ -23,9 +23,16 @@ namespace DataAccessLayer.Operations
                 return _db.Set<T>().ToList();
             }
             return _db.Set<T>().Include(navigationPoperty).ToList();
-        } 
+        }
 
-        public T GetEntity(int id) => _db.Set<T>().Where(e => e.Id == id).First();
+        public T GetEntity(int id, string navigationPoperty = null) { 
+            if(string.IsNullOrEmpty(navigationPoperty))
+            {
+                return _db.Set<T>().Where(e => e.Id == id).First();
+            }
+            return _db.Set<T>().Include(navigationPoperty).Where(e => e.Id == id).First();
+            
+        }
         public void AddEntity(T entity)
         {
             _db.Set<T>().Add(entity);
