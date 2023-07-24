@@ -35,6 +35,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient(typeof(IGenericDataAccess<>), typeof(GenericDataAccess<>));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IImagesDataAccess, ImagesDataAccess>();
+builder.Services.AddTransient<IReservationDataAccess, ReservationDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IGuestService, GuestService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
