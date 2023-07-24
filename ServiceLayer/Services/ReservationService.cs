@@ -10,11 +10,14 @@ namespace ServiceLayer.Services
     public class ReservationService : IReservationService
     {
         private readonly IGenericDataAccess<Reservation> _context;
+        private readonly IReservationDataAccess _reservationContext;
         public ReservationService(
-            IGenericDataAccess<Reservation> reservationContext
+            IGenericDataAccess<Reservation> genericReservationContext,
+            IReservationDataAccess reservationContext
             )
         {
-            _context = reservationContext;
+            _context = genericReservationContext;
+            _reservationContext = reservationContext;
         }
 
         public Result<List<UniversalDTO>> GetReservations()
@@ -57,6 +60,21 @@ namespace ServiceLayer.Services
             }
         }
 
+        public Result<List<Dictionary<string, string>>> GetReservationsDatesByRoomId(int roomId)
+        {
+            if (_reservationContext.CheckReservationByRoomId(roomId))
+            {
+                List<Reservation> reservations = _reservationContext.GetReservationsByRoomId(roomId);
+                List<Dictionary<string, string>> reservatedDates = reservations
+                    .GroupBy(r => r.RoomId)
+                    .Select(g => g.ToDictionary(r => r.CheckInDate.ToString("dd/MM/yyyy"), r => r.CheckOutDate.ToString("dd/MM/yyyy")))
+                    .ToList();
+
+                return Result<List<Dictionary<string, string>>>.Success(reservatedDates);
+
+            };
+            return Result<List<Dictionary<string, string>>>.Failure("Have no reservation connected to this room");
+        } 
 
         public Result<Reservation> AddReservation(Reservation reservation)
         {
@@ -79,6 +97,7 @@ namespace ServiceLayer.Services
             
             
         }
+
 
         public Result<Reservation> UpdateReservation(Reservation reservation)
         {

@@ -38,6 +38,17 @@ namespace ApartmanManagerApi.Controllers
             }
             return Ok(result.Data);
         }
+        
+        [HttpGet("dates/{roomId}")]
+        public ActionResult<Result<UniversalDTO>> GetReservationDatesByRoomId(int roomId)
+        {
+            var result = _reservationService.GetReservationsDatesByRoomId(roomId);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+            return Ok(result.Data);
+        }
 
         [HttpPost]
         public ActionResult<Result<Reservation>> AddReservation([FromBody] Reservation reservation)
