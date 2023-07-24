@@ -1,0 +1,117 @@
+.month_selection_wrapper{
+      display: flex;
+      width: 82%;
+      margin: auto;
+      position: relative;
+      color: white;
+      margin-top: 2rem;
+}
+
+.month_selection{
+    width: 200px;
+    height: 45px;
+    border: none;
+    outline: none;
+    padding: 0px 7px;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: transparent;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+.month_selection:focus {
+    border: 2px solid transparent;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4),
+    inset 3px 3px 10px rgba(0,0,0,1),
+    inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+.month_selection > option{
+    font-size: 16px;
+    color: white;
+}
+.month_selection > *{
+    font-size: 16px;
+    background-color: #212121;
+}
+.container{
+    width: 82%;
+    margin: auto;
+    margin-top: 2rem;
+    background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+    border-radius: 20px;
+    transition: all .3s;
+}
+.container_wrapper{
+    background-color: #212121;
+    transition: all .2s;
+    border-radius: 0;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+    .container_wrapper:hover {
+    transform: scale(0.99);
+    border-radius: 20px;
+   }
+   
+   .container:hover {
+    box-shadow: 0px 0px 30px 5px rgba(0, 255, 119, 0.41);
+   }
+
+.calendar_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-self: center;
+    border-bottom: 1px solid grey;
+}
+    .header_cell{
+        display: flex;
+        justify-content: center;
+        width: calc(100% / 7);
+        height: 3rem;
+        margin-top: 0.5rem;
+        font-size: 22px;
+    }       
+
+.calendar_body{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-self: center;
+}
+    
+    .calendar_cell {
+        border: none;
+        background: none;
+        border: 1px solid rgba(67, 67, 67, 0.438);
+        display: flex;
+        justify-content: center;
+        align-items: center;    
+        width: calc(100% / 7); /* 7 cella egy sorban */
+        height: 3rem;
+        font-size: 16px;
+        box-sizing: border-box;
+        cursor: pointer;
+    
+    }
+    
+      .container:hover .calendar_cell:last-child {
+        border-bottom-right-radius: 20px;
+      }
+
+      .container:hover .calendar_cell:nth-last-child(7){
+        border-bottom-left-radius: 20px;
+      }
+    
+      .selected{
+        background: #141414;
+        box-shadow: inset 8px 8px 16px #0f0f0f,
+            inset -8px -8px 16px #191919;
+        border: 1px solid rgba(0, 0, 0, 0.382);
+      }
+
+
+      

@@ -1,0 +1,105 @@
+.container{
+    max-width: 95%;
+    height: 100%;
+    margin: 5rem auto;
+
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+.calendar_container{
+    border-right: 1px solid white;
+    height: 100%;
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.details_container{
+    grid-area: 1 / 2 / 2 / 3;
+
+}
+
+.carousel{
+    max-height: 50%;
+    margin-top: 6rem;
+}
+.room_details{
+    max-width: 100%;
+    max-height: auto;
+    margin-top: 2rem;
+}
+.room_details > h1{
+    text-align: center;
+    font-size: 28px;
+}
+.title{
+    margin: 1rem;
+    font-size: 20px;
+    color: white;
+    border-bottom: 1px solid white;
+}
+.description{
+    padding: 1rem;
+    font-size: 18px;
+}
+.slots{
+    display: flex;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    font-size: 18px;
+}
+.person_icon {
+    position: absolute;
+    right: 4rem;
+    
+}
+.price_wrapper{
+    display: flex;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    font-size: 18px;
+}
+.price{
+    position: absolute;
+    right: 4rem;
+}
+
+
+.footer_navs{
+    flex-direction: row;
+      display: flex;
+      position: relative;
+      color: white;
+      margin-top: 2rem;
+      margin-left: 1rem;
+}
+.btn {
+    width: 200px;
+    height: 45px;
+    border: none;
+    outline: none;
+    padding: 0px 7px;
+    border-radius: 6px;
+    color: #fff;
+    background-color: transparent;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
+    text-align: center;
+    padding-top: 10px;
+    font-size: 22px;
+  }
+  
+  .btn:focus {
+    border: 2px solid transparent;
+    color: #fff;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4),
+    inset 3px 3px 10px rgba(0,0,0,1),
+    inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+  }
+
+  .next_room{
+      position: absolute;
+      right: 1rem;
+  }
