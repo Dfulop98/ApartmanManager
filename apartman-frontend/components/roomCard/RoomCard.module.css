@@ -3,6 +3,13 @@
     flex-direction: column;
     gap: 5rem;
     margin-top: 10rem;
+    
+}
+.room_container{
+    border-radius: 15px;
+    background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+    border-radius: 20px;
+    transition: all .3s;
 }
 .room_card{
     display: grid;
@@ -12,13 +19,23 @@
     grid-row-gap: 0px;
     padding: 5px;
     max-height: 334px;
-
-    border-radius: 15px;
-    background: linear-gradient(145deg, #0e0e0e, #101010);
-    box-shadow:  16px 16px 32px #0b0b0b,
-                -16px -16px 32px #131313;
+    background-color: #212121;
+    transition: all .2s;
+    border-radius: 0;
+    box-shadow: 3px 3px 10px rgba(0,0,0,1),
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
+    
 }
 
+
+.room_card:hover {
+    transform: scale(0.99);
+    border-radius: 20px;
+   }
+   
+   .room_container:hover {
+    box-shadow: 0px 0px 30px 5px rgba(0, 255, 119, 0.41);
+   }
 
 .room_images{
     grid-area: 1 / 1 / 2 / 2;
@@ -40,7 +57,7 @@
     }
         .info_header{
             grid-area: 1 / 1 / 2 / 2;
-            border-bottom: 5px solid rgba(126, 121, 121, 0.694);
+            border-bottom: 1px solid white;
             padding: 5px;
         }
             .info_header > *{
@@ -104,5 +121,5 @@
                     justify-content: center;
                     align-items: center;
                     border-radius: 9px;
-                    border: 1px solid grey;
+                    border: 1px solid rgb(255, 255, 255);
                 }
