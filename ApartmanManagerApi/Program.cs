@@ -39,6 +39,7 @@ builder.Services.AddTransient<IReservationDataAccess, ReservationDataAccess>();
 builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IGuestService, GuestService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IImagesService, ImagesService>();
 
 var app = builder.Build();

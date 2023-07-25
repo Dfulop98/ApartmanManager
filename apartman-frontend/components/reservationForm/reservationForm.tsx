@@ -51,6 +51,7 @@ const ReservationForm: React.FC<roomProps> = (props): ReactElement => {
   
   const onSubmit: SubmitHandler<FormValues> = (data) => 
   {
+    
     router.push('/reservation-confirm')
   }
 
@@ -73,6 +74,14 @@ const ReservationForm: React.FC<roomProps> = (props): ReactElement => {
               <div className={Styles.form}>
                 <input placeholder=" " {...register("lastName")} className={Styles.input}/>
                 <label className={Styles.label}>Last Name</label>
+              </div>
+
+              <div className={Styles.form}>
+                <input placeholder=" "
+                className={`${Styles.input} `}
+                {...register("email")}/>
+                {errors?.firstName && <p>{errors.firstName.message}</p>}
+                <label className={Styles.label}>Email</label>
               </div>
             </div>
 
