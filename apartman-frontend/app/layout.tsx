@@ -2,29 +2,30 @@ import './globals.css'
 import type { Metadata } from 'next'
 import Navbar from '@/components/navbar/navbar'
 
+import type { ReactNode, FC } from "react";
+
 export const metadata: Metadata = {
   title: 'homepage',
   description: 'welcome to home page',
 
 }
 
+interface RootLayoutProps {
+  children: ReactNode;
+  confirmModal: ReactNode;
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const RootLayout: FC<RootLayoutProps> = ({ children, confirmModal }) => {
   return (
-    <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
-      <body >
-        <Navbar/>
+    <html>
+      <body>
+        <Navbar />
+
         {children}
+        {confirmModal}
       </body>
     </html>
-  )
-}
+  );
+};
+
+export default RootLayout;

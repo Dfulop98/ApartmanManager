@@ -29,6 +29,6 @@ export default function Navbar() {
           <DappButton/>
         </div>
       </nav>
-      </header>
+    </header>
   )
 }

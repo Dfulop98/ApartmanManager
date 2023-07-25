@@ -43,7 +43,7 @@ namespace ServiceLayer.Services
 
             if (_context.CheckEntity(id))
             {
-                Room room = _context.GetEntity(id);
+                Room room = _context.GetEntity(id, "Images");
                 var roomDTO = UniversalDtoFactory.CreateFromObject(
                     room,
                     DTOConfig.RoomProperties,

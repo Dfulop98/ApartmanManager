@@ -8,6 +8,7 @@ namespace ServiceLayer.ServiceInterfaces
     {
         public Result<List<UniversalDTO>> GetReservations();
         public Result<UniversalDTO> GetReservation(int id);
+        public Result<List<Dictionary<string, string>>> GetReservationsDatesByRoomId(int roomId);
         public Result<Reservation> AddReservation(Reservation reservation);
         public Result<Reservation> RemoveReservation(int id);
         public Result<Reservation> UpdateReservation(Reservation reservation);

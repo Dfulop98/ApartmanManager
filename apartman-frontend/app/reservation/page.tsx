@@ -1,6 +1,6 @@
 
 
-export default function Callendar() {
+export default function Reservation() {
   return (
     <>
     <br />
