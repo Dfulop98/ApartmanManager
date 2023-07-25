@@ -42,6 +42,8 @@ export type Day = {
 export type FormValues = {
     firstName: string;
     lastName: string;
+    email: string;
+    phone: string;
     nationality: string;
     country: string;
     postalCode: string;
