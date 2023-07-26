@@ -10,24 +10,35 @@ namespace ServiceLayer.Services
 {
     public class EmailService : IEmailService
     {
-        public Result<Reservation> SendRequestEmail(Reservation incomingReservation)
+        public Result<Reservation> SendRequestEmail
+            (
+            Reservation incomingReservation,
+            string sender,
+            string receipt,
+            string server,
+            int port,
+            string username,
+            string password
+            )
         {
             try
             {
                 MimeMessage message = new ();
-                message.From.Add(new MailboxAddress("RentalMasterApp", "RentalMaster@proton.me"));
-                message.To.Add(new MailboxAddress("Dobó Fülöp", "dobo.fulop97@gmail.com"));
+                message.From.Add(new MailboxAddress("RentalMasterApp", sender));
+                message.To.Add(new MailboxAddress("Dobó Fülöp", receipt));
                 
                 message.Subject = $"{incomingReservation.Name} Reservation Request";
 
-                BodyBuilder bodyBuilder= new();
-                bodyBuilder.TextBody = _toEmailMessage(incomingReservation);
+                BodyBuilder bodyBuilder = new()
+                {
+                    TextBody = _toEmailMessage(incomingReservation)
+                };
                 message.Body= bodyBuilder.ToMessageBody();
 
-                using (SmtpClient client = new SmtpClient())
+                using (SmtpClient client = new())
                 {
-                    client.Connect("smtp.sendgrid.net", 587, SecureSocketOptions.StartTls);
-                    client.Authenticate("apikey", "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");
+                    client.Connect(server, port, SecureSocketOptions.StartTls);
+                    client.Authenticate(username, password);
                     client.Send(message);
                     client.Disconnect(true);
                 }

@@ -1,4 +1,5 @@
 
+using ApartmanManagerApi.Util;
 using DataAccessLayer.DbAccess;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Operations;
@@ -31,7 +32,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddTransient(typeof(IGenericDataAccess<>), typeof(GenericDataAccess<>));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IImagesDataAccess, ImagesDataAccess>();
@@ -41,6 +41,8 @@ builder.Services.AddTransient<IGuestService, GuestService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IImagesService, ImagesService>();
+
+builder.Services.Configure<StmpConfig>(builder.Configuration.GetSection("stmp"));
 
 var app = builder.Build();
 
@@ -58,3 +60,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

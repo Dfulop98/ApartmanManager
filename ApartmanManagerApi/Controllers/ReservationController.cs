@@ -1,6 +1,9 @@
-﻿using DataModelLayer.Models;
+﻿
+using ApartmanManagerApi.Util;
+using DataModelLayer.Models;
 using DTOLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ServiceLayer.Factories.Model;
 using ServiceLayer.ServiceInterfaces;
 using ServiceLayer.Services;
@@ -13,12 +16,13 @@ namespace ApartmanManagerApi.Controllers
     {
         private readonly IReservationService _reservationService;
         private readonly IEmailService _emailService;
-
-
-        public ReservationController(IReservationService reservationService, IEmailService emailService)
+        private readonly IOptions<StmpConfig> _stmpConfiguration;
+        
+        public ReservationController(IReservationService reservationService, IEmailService emailService,IOptions<StmpConfig> configuration)
         {
             _reservationService = reservationService;
             _emailService = emailService;
+            _stmpConfiguration = configuration;
         }
 
         [HttpGet]
@@ -31,6 +35,7 @@ namespace ApartmanManagerApi.Controllers
             }
             return Ok(result.Data);
         }
+        
 
         [HttpGet("{id}")]
         public ActionResult<Result<UniversalDTO>> GetReservation(int id)
@@ -95,7 +100,18 @@ namespace ApartmanManagerApi.Controllers
         [HttpPost("request")]
         public ActionResult<Result<Reservation>> SendRequestEmail(Reservation incomingReservation)
         {
-            var result = _emailService.SendRequestEmail(incomingReservation);
+            var stmp = _stmpConfiguration.Value;
+            Result<Reservation> result = _emailService.SendRequestEmail 
+            (
+            incomingReservation,
+            _stmpConfiguration.Value.Sender,
+            _stmpConfiguration.Value.Receipt,
+            _stmpConfiguration.Value.Server,
+            _stmpConfiguration.Value.Port,
+            _stmpConfiguration.Value.Username,
+            _stmpConfiguration.Value.Password
+                
+                );
             if (!result.IsSuccess)
             {
                 return BadRequest(result.ErrorMessage);
