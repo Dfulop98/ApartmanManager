@@ -104,12 +104,12 @@ namespace ApartmanManagerApi.Controllers
             Result<Reservation> result = _emailService.SendRequestEmail 
             (
             incomingReservation,
-            _stmpConfiguration.Value.Sender,
-            _stmpConfiguration.Value.Receipt,
-            _stmpConfiguration.Value.Server,
-            _stmpConfiguration.Value.Port,
-            _stmpConfiguration.Value.Username,
-            _stmpConfiguration.Value.Password
+            stmp.Sender,
+            stmp.Receipt,
+            stmp.Server,
+            stmp.Port,
+            stmp.Username,
+            stmp.Password
                 
                 );
             if (!result.IsSuccess)
