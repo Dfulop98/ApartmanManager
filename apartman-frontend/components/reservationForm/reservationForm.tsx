@@ -11,6 +11,7 @@ import CountrySelection from "./countrySelection";
 import Styles from "./reservationForm.module.css";
 
 import { Day, FormValues } from "@/types";
+import sendReservationRequest from "@/lib/sendReservationRequest";
 
 
 interface roomProps {
@@ -20,7 +21,7 @@ interface roomProps {
 
 const ReservationForm: React.FC<roomProps> = (props): ReactElement => {
 
-  const router = useRouter();
+  const Router = useRouter();
   const [startDate, setStartDate] = useState<Day | null>(null);
   const [endDate, setEndDate] = useState<Day | null>(null); 
   const countryRef = useRef<HTMLSelectElement>(null);
@@ -51,8 +52,11 @@ const ReservationForm: React.FC<roomProps> = (props): ReactElement => {
   
   const onSubmit: SubmitHandler<FormValues> = (data) => 
   {
+    var res = sendReservationRequest(data, startDate, endDate, roomId)
+    res.then((r) => {
+      console.log(r)
+    })
     
-    router.push('/reservation-confirm')
   }
 
     return (
@@ -83,6 +87,12 @@ const ReservationForm: React.FC<roomProps> = (props): ReactElement => {
                 {errors?.firstName && <p>{errors.firstName.message}</p>}
                 <label className={Styles.label}>Email</label>
               </div>
+
+              <div className={Styles.form}>
+                <input placeholder=" " {...register("phone")} className={Styles.input}/>
+                <label className={Styles.label}>Phone num.</label>
+              </div>
+
             </div>
 
             <div className={Styles.line_wrapper}>
